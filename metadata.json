@@ -1,0 +1,6 @@
+{
+  "name": "Bank Bitachon",
+  "description": "A premium, secure, and modern digital banking and credit union platform delivering confidence, high yields, and personalized lending.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

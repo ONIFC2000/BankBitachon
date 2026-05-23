@@ -1,0 +1,385 @@
+/**
+ * @license
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+import { 
+  ShieldCheck, 
+  ArrowRight, 
+  ChevronRight, 
+  TrendingUp, 
+  BadgePercent, 
+  UsersRound, 
+  Briefcase,
+  Lock,
+  PiggyBank,
+  CheckCircle2,
+  AlertCircle
+} from 'lucide-react';
+
+interface HeroProps {
+  onLoginSuccess: (userName: string) => void;
+  onNavigateToSection: (sectionId: string) => void;
+  isLoggedIn: boolean;
+  onOpenSelfLogin: () => void;
+  setActiveTab: (tab: string) => void;
+}
+
+export default function Hero({ 
+  onLoginSuccess, 
+  onNavigateToSection, 
+  isLoggedIn,
+  onOpenSelfLogin,
+  setActiveTab
+}: HeroProps) {
+  const [activeSlide, setActiveSlide] = useState(0);
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [loginError, setLoginError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Auto scroll rate slides
+  const marketingSlides = [
+    {
+      title: "Confidence starts with a 4.85% APY.",
+      subtitle: "High-Yield Savings with Bank Bitachon",
+      description: "Secure your capital in our triple-certified savings account. 10x the national average, zero monthly maintenance fees, and immediate liquidity when you need it.",
+      highlights: ["NCUA Insured to $250k", "No Minimum Balance", "Monthly Auto-Compound"],
+      ctaText: "Open High-Yield Savings",
+      targetId: "personal",
+      badge: "Market Leading Yield",
+      image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=1200"
+    },
+    {
+      title: "Lock in an Auto Rate of 3.99% APR.",
+      subtitle: "Drive with Certainty & Control",
+      description: "Buy a new car or refinance your existing loan to slash your monthly payments. Pre-qualify online in as little as 3 minutes with zero credit score impact.",
+      highlights: ["90 Days No Payments", "Up to 84-Month Terms", "Refinancing Made Easy"],
+      ctaText: "Calculate Auto Savings",
+      targetId: "calcs",
+      badge: "Refinance & Save",
+      image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&q=80&w=1200"
+    },
+    {
+      title: "Your Business Deserves 5.12% APY Reserve Yield.",
+      subtitle: "Capital Management Solutions",
+      description: "Keep your operational assets fluid while earning class-leading returns. Built for modern builders, startups, and pillars of local commerce.",
+      highlights: ["Unlimited Business Ach", "Dedicated Commercial Advisor", "Fraud Lock Guarantees"],
+      ctaText: "Explore Business Services",
+      targetId: "business",
+      badge: "Commercial Solutions",
+      image: "https://images.unsplash.com/photo-1556740758-90de374c12ad?auto=format&fit=crop&q=80&w=1200"
+    }
+  ];
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActiveSlide((prev) => (prev + 1) % marketingSlides.length);
+    }, 7000);
+    return () => clearInterval(timer);
+  }, [marketingSlides.length]);
+
+  const handleHeroLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!username.trim()) {
+      setLoginError('Please enter a secure Username.');
+      return;
+    }
+    if (password.length < 4) {
+      setLoginError('Password must be at least 4 characters.');
+      return;
+    }
+    
+    setIsSubmitting(true);
+    setLoginError('');
+    
+    setTimeout(() => {
+      // Capitalize first letter of username for nice display
+      const formattedName = username.charAt(0).toUpperCase() + username.slice(1);
+      onLoginSuccess(formattedName);
+      setIsSubmitting(false);
+      setActiveTab('dashboard');
+    }, 1200);
+  };
+
+  const fillDemoCredentials = () => {
+    setUsername('rebecca_gold');
+    setPassword('bitachonSafe2026');
+    setLoginError('');
+  };
+
+  return (
+    <section id="hero" className="relative bg-slate-950 pb-16 pt-6 overflow-hidden bg-grid-pattern">
+      {/* Decorative Blur Backgrounds */}
+      <div className="absolute top-1/4 left-1/10 w-96 h-96 bg-primary-700/10 rounded-full filter blur-[100px] pointer-events-none" />
+      <div className="absolute bottom-1/4 right-1/10 w-96 h-96 bg-gold-600/10 rounded-full filter blur-[100px] pointer-events-none" />
+
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+          
+          {/* Left Panel: Carousel Slider of Rates */}
+          <div className="col-span-1 lg:col-span-7 select-none">
+            <div className="min-h-[460px] flex flex-col justify-center">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeSlide}
+                  initial={{ opacity: 0, x: -15 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 15 }}
+                  transition={{ duration: 0.4, ease: "easeOut" }}
+                  className="space-y-6"
+                >
+                  {/* Badge */}
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-gold-400/10 text-gold-400 ring-1 ring-gold-400/30 rounded-full text-xs font-semibold tracking-wider uppercase font-display">
+                    <BadgePercent className="w-4 h-4" />
+                    {marketingSlides[activeSlide].badge}
+                  </span>
+
+                  {/* Main Header Tag */}
+                  <h1 className="font-display font-extrabold text-3.5xl sm:text-4.5xl md:text-5xl text-white tracking-tight leading-[1.1]">
+                    {marketingSlides[activeSlide].title.split('.').map((part, index) => {
+                      if (index === 0 && part) {
+                        return <span key={index} className="block">{part}.</span>;
+                      }
+                      return <span key={index} className="text-gold-400 block mt-1">{part}</span>;
+                    })}
+                  </h1>
+
+                  {/* Subtitle */}
+                  <h3 className="text-lg font-bold text-slate-300 font-sans tracking-wide">
+                    {marketingSlides[activeSlide].subtitle}
+                  </h3>
+
+                  {/* Description */}
+                  <p className="text-slate-400 text-sm sm:text-base leading-relaxed max-w-xl">
+                    {marketingSlides[activeSlide].description}
+                  </p>
+
+                  {/* Bullet Achievements */}
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+                    {marketingSlides[activeSlide].highlights.map((highlight, idx) => (
+                      <div key={idx} className="flex items-center gap-2 text-xs text-slate-200 bg-slate-900/40 p-2.5 rounded-lg border border-slate-800/40">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+                        <span className="font-semibold tracking-wide">{highlight}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Buttons */}
+                  <div className="flex flex-wrap items-center gap-4 pt-4">
+                    <button
+                      onClick={() => onNavigateToSection(marketingSlides[activeSlide].targetId)}
+                      className="inline-flex items-center gap-2 bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-500 hover:to-primary-600 text-white font-bold text-sm tracking-wide px-6 py-3.5 rounded-lg transition-all shadow-lg hover:shadow-primary-500/15 cursor-pointer"
+                    >
+                      <span>{marketingSlides[activeSlide].ctaText}</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </button>
+                    
+                    <button
+                      onClick={() => onNavigateToSection('rates')}
+                      className="inline-flex items-center gap-1 text-xs font-semibold text-slate-300 hover:text-white hover:underline uppercase tracking-wider py-1"
+                    >
+                      <span>See Comparative Yields</span>
+                      <ChevronRight className="w-4 h-4 text-gold-400" />
+                    </button>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+
+              {/* Slider Dots */}
+              <div className="flex items-center space-x-2.5 mt-8">
+                {marketingSlides.map((_, dotIdx) => (
+                  <button
+                    key={dotIdx}
+                    onClick={() => setActiveSlide(dotIdx)}
+                    className={`h-2.5 rounded-full transition-all duration-300 cursor-pointer ${
+                      activeSlide === dotIdx ? 'w-8 bg-gold-400' : 'w-2.5 bg-slate-700 hover:bg-slate-500'
+                    }`}
+                    aria-label={`Slide ${dotIdx + 1}`}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Right Panel: Secure Portal Login Card & Floating Human Artwork */}
+          <div className="col-span-1 lg:col-span-5 relative mt-6 lg:mt-0" id="hero-portal-panel">
+            
+            {/* Login Box */}
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.15, duration: 0.5 }}
+              className="w-full bg-slate-900 border border-slate-800/80 rounded-2xl shadow-2xl relative overflow-hidden"
+            >
+              {/* Card Header Security Banner */}
+              <div className="bg-slate-950 px-6 py-4.5 border-b border-gold-600/30 flex justify-between items-center bg-radial-gradient">
+                <div className="flex items-center gap-2.5">
+                  <div className="p-1.5 bg-gold-400/10 rounded-md">
+                    <ShieldCheck className="w-5 h-5 text-gold-400" />
+                  </div>
+                  <div>
+                    <h3 className="font-display font-bold text-sm text-white uppercase tracking-wider">
+                      Secure Bitachon Portal
+                    </h3>
+                    <p className="text-[10px] text-emerald-400 flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full inline-block animate-pulse" />
+                      Encrypted session active
+                    </p>
+                  </div>
+                </div>
+                
+                <span className="font-mono text-[9px] text-slate-500 bg-slate-900 px-2 py-1 rounded border border-slate-800 tracking-wider">
+                  MFA-READY
+                </span>
+              </div>
+
+              {/* Login States */}
+              <div className="p-6 sm:p-8 space-y-6">
+                {isLoggedIn ? (
+                  <div className="space-y-5 text-center py-6">
+                    <div className="w-14 h-14 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto border border-emerald-500/30">
+                      <ShieldCheck className="w-8 h-8 text-emerald-400" />
+                    </div>
+                    <div className="space-y-1">
+                      <h4 className="font-display font-black text-lg text-white">Access Authenticated!</h4>
+                      <p className="text-xs text-slate-400 max-w-xs mx-auto">
+                        Your secure session has been initiated with Bank Bitachon systems. Enter your dashboard below.
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => setActiveTab('dashboard')}
+                      className="w-full bg-gradient-to-r from-gold-500 to-gold-600 hover:from-gold-400 hover:to-gold-550 text-slate-950 font-extrabold text-sm py-3 rounded-lg shadow-md transition-all active:scale-98 cursor-pointer"
+                    >
+                      Go to Account Dashboard
+                    </button>
+                  </div>
+                ) : (
+                  <form onSubmit={handleHeroLogin} className="space-y-4">
+                    {loginError && (
+                      <div className="p-3 bg-red-950/40 border border-red-800/50 rounded-lg flex items-start gap-2 text-xs text-red-300">
+                        <AlertCircle className="w-4 h-4 text-red-400 flex-shrink-0 mt-0.5" />
+                        <span>{loginError}</span>
+                      </div>
+                    )}
+
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-bold text-slate-300 uppercase tracking-wider block">
+                        Bitachon Secure ID (Username)
+                      </label>
+                      <div className="relative">
+                        <input 
+                          type="text"
+                          required
+                          placeholder="Enter username"
+                          value={username}
+                          onChange={(e) => {
+                            setUsername(e.target.value);
+                            setLoginError('');
+                          }}
+                          className="w-full bg-slate-950 border border-slate-850 focus:border-gold-500 focus:ring-1 focus:ring-gold-500/30 rounded-lg py-3 px-4 text-sm text-white placeholder-slate-600 focus:outline-none transition-all"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <div className="flex justify-between items-center">
+                        <label className="text-xs font-bold text-slate-300 uppercase tracking-wider block">
+                          Access PIN / Password
+                        </label>
+                        <button 
+                          type="button"
+                          onClick={() => alert("Please use the 'Rebecca Goldstein' prefill below to login to test secure functions!")}
+                          className="text-[10px] text-slate-500 hover:text-gold-400 transition-colors"
+                        >
+                          Forgot Safe ID?
+                        </button>
+                      </div>
+                      <input 
+                        type="password"
+                        required
+                        placeholder="••••••••"
+                        value={password}
+                        onChange={(e) => {
+                          setPassword(e.target.value);
+                          setLoginError('');
+                        }}
+                        className="w-full bg-slate-950 border border-slate-850 focus:border-gold-500 focus:ring-1 focus:ring-gold-500/30 rounded-lg py-3 px-4 text-sm text-white placeholder-slate-600 focus:outline-none transition-all"
+                      />
+                    </div>
+
+                    <button 
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="w-full bg-gradient-to-r from-gold-500 to-gold-600 hover:from-gold-400 hover:to-gold-550 text-slate-950 font-extrabold text-sm py-3.5 rounded-lg tracking-wide shadow-lg active:scale-[0.99] disabled:opacity-50 disabled:pointer-events-none transition-all flex items-center justify-center gap-2 cursor-pointer mt-2"
+                    >
+                      {isSubmitting ? (
+                        <>
+                          <span className="w-4 h-4 border-2 border-slate-950 border-t-transparent rounded-full animate-spin" />
+                          <span>Validating Biometrics...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Lock className="w-4 h-4 fill-slate-950" />
+                          <span>Unlock Secure Banking</span>
+                        </>
+                      )}
+                    </button>
+
+                    {/* Pre-fill Option for Demo */}
+                    <div className="pt-4 border-t border-slate-800/80">
+                      <button
+                        type="button"
+                        onClick={fillDemoCredentials}
+                        className="w-full py-2 px-3 bg-slate-950 hover:bg-slate-850 border border-slate-800 rounded-lg text-xs font-semibold text-gold-400 hover:text-gold-300 transition-all text-center flex items-center justify-center gap-2"
+                      >
+                        <UsersRound className="w-3.5 h-3.5" />
+                        <span>Demo Pass: Rebecca Goldstein</span>
+                      </button>
+                      <p className="text-[10px] text-slate-600 text-center mt-2.5">
+                        Are you a new member? <button type="button" onClick={onOpenSelfLogin} className="text-slate-400 hover:text-white underline">Enroll Credentials</button>
+                      </p>
+                    </div>
+                  </form>
+                )}
+              </div>
+            </motion.div>
+
+            {/* Float Badge below: FDIC/NCUA assurance */}
+            <div className="mt-4 flex justify-between items-center text-slate-500 text-[10px] font-sans px-2">
+              <span className="flex items-center gap-1">
+                <ShieldCheck className="w-3 h-3 text-emerald-400" />
+                Federal Reserve Guard
+              </span>
+              <span>NCUA insured to $250,000</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Decorative Human Image banner strip */}
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-16 border-t border-slate-900 pt-10">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+          <div className="space-y-1">
+            <div className="font-display font-black text-2.5xl text-gold-400">4.85% <span className="text-xs">APY</span></div>
+            <div className="text-xs font-bold text-slate-400 uppercase tracking-widest">Savings accounts</div>
+          </div>
+          <div className="space-y-1">
+            <div className="font-display font-black text-2.5xl text-gold-400">3.99% <span className="text-xs">APR</span></div>
+            <div className="text-xs font-bold text-slate-400 uppercase tracking-widest">Auto vehicle refinance</div>
+          </div>
+          <div className="space-y-1">
+            <div className="font-display font-black text-2.5xl text-gold-400">$0 <span className="text-xs">FEES</span></div>
+            <div className="text-xs font-bold text-slate-400 uppercase tracking-widest">Monthly maintenance</div>
+          </div>
+          <div className="space-y-1">
+            <div className="font-display font-black text-2.5xl text-gold-400">100% <span className="text-xs">SAFE</span></div>
+            <div className="text-xs font-bold text-slate-400 uppercase tracking-widest">MFA protected portal</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
