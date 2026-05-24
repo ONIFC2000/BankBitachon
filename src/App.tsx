@@ -10,11 +10,13 @@ import BentoFeatures from './components/BentoFeatures';
 import Calculator from './components/Calculator';
 import RatesComparisons from './components/RatesComparisons';
 import AtmLocator from './components/AtmLocator';
-import Testimonials from './components/Testimonials';
+import EmpowermentTestimonials from './components/EmpowermentTestimonials';
+import LogoCloudSection from './components/LogoCloudSection';
 import Faqs from './components/Faqs';
 import Dashboard from './components/Dashboard';
 import Footer from './components/Footer';
 import LoginModal from './components/LoginModal';
+import AboutUsSection from '@/components/ui/about-us-section';
 import { getSupabaseClient, isSupabaseConfigured } from './lib/supabase';
 
 import { ShieldCheck, ArrowRight, ArrowUpCircle } from 'lucide-react';
@@ -145,11 +147,17 @@ export default function App() {
             {/* Premium Mortgage & Auto sliding calculators */}
             <Calculator />
 
+            {/* Member stories tied to the empowerment simulator */}
+            <EmpowermentTestimonials />
+
             {/* ATM Locator and physical branch trust mapping */}
             <AtmLocator />
 
-            {/* Beautiful testimonial sliders featuring real humans */}
-            <Testimonials />
+            {/* Trusted infrastructure partner grid */}
+            <LogoCloudSection />
+
+            {/* Story section placed directly above FAQ topics */}
+            <AboutUsSection />
 
             {/* Structural expandable accordions covering FAQ topics */}
             <Faqs />
