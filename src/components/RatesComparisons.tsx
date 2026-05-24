@@ -14,7 +14,7 @@ export default function RatesComparisons() {
   const filteredRates = RATE_DATA.filter(item => item.type === selectedCategory);
 
   return (
-    <section id="rates" className="py-20 bg-slate-950 text-white relative overflow-hidden bg-grid-pattern">
+    <section id="rates" className="py-14 sm:py-20 bg-slate-950 text-white relative overflow-hidden bg-grid-pattern">
       {/* Decorative colored glow circles */}
       <div className="absolute top-1/2 left-0 w-96 h-96 bg-primary-700/10 rounded-full filter blur-[120px] pointer-events-none -translate-x-1/2" />
       <div className="absolute bottom-0 right-0 w-80 h-80 bg-gold-450/5 rounded-full filter blur-[100px] pointer-events-none translate-x-1/4" />
@@ -22,27 +22,27 @@ export default function RatesComparisons() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Header Block */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-14">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 sm:mb-14">
           <div className="space-y-3 max-w-2xl">
             <span className="inline-flex items-center gap-1 px-3 py-1 bg-gold-400/10 text-gold-400 border border-gold-400/20 rounded-full text-xs font-bold uppercase tracking-wider font-display">
               <Percent className="w-3.5 h-3.5" />
               Dynamic Rate Sheet
             </span>
-            <h2 className="font-display font-black text-3.5xl sm:text-4xl text-white tracking-tight leading-tight">
+            <h2 className="font-display font-black text-3xl sm:text-4xl text-white tracking-tight leading-tight">
               A yield surplus that puts <span className="text-gold-400 text-glow">capital first</span>
             </h2>
-            <p className="text-slate-400 text-sm">
+            <p className="text-slate-400 text-sm sm:text-base leading-relaxed">
               We operate as a mutual credit framework. That means instead of paying expensive Wall Street executive bonuses, we pump surplus margins right back into your interest rates.
             </p>
           </div>
 
           {/* Quick toggle bar categories */}
-          <div className="flex bg-slate-900 border border-slate-800 p-1 rounded-xl self-start md:self-end">
+          <div className="grid w-full grid-cols-1 min-[420px]:grid-cols-3 gap-1 bg-slate-900 border border-slate-800 p-1 rounded-2xl self-start md:w-auto md:self-end">
             {(['savings', 'loan', 'mortgage'] as const).map((cat) => (
               <button
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
-                className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-widest transition-all cursor-pointer ${
+                className={`min-h-11 px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-widest transition-all cursor-pointer ${
                   selectedCategory === cat 
                     ? 'bg-gold-500 text-slate-950 font-black shadow-md' 
                     : 'text-slate-400 hover:text-white'
@@ -55,7 +55,7 @@ export default function RatesComparisons() {
         </div>
 
         {/* Comparison grid layout with animating rating bars */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center">
           
           {/* Comparison table panel (Right side / Columns 7/12) */}
           <div className="lg:col-span-8 space-y-6">
@@ -78,13 +78,13 @@ export default function RatesComparisons() {
                   return (
                     <div 
                       key={rate.id}
-                      className="bg-slate-900/60 p-6 rounded-2xl border border-slate-800/80 hover:border-slate-700/60 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-6"
+                      className="bg-slate-900/60 p-4 sm:p-6 rounded-2xl border border-slate-800/80 hover:border-slate-700/60 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-5 sm:gap-6"
                     >
                       <div className="space-y-1.5 flex-1 max-w-sm">
                         <h4 className="font-display font-black text-lg text-white">
                           {rate.name}
                         </h4>
-                        <p className="text-xs text-slate-400">
+                        <p className="text-sm text-slate-400 leading-relaxed">
                           {rate.label}
                         </p>
                       </div>
@@ -137,7 +137,7 @@ export default function RatesComparisons() {
           </div>
 
           {/* Call-to-action Side Panel (Left side / Columns 4/12) */}
-          <div className="lg:col-span-4 bg-gradient-to-br from-slate-900 to-slate-950 border border-gold-600/20 p-6 sm:p-8 rounded-2xl space-y-6">
+          <div className="lg:col-span-4 bg-gradient-to-br from-slate-900 to-slate-950 border border-gold-600/20 p-5 sm:p-8 rounded-2xl space-y-6">
             <div className="p-3 bg-gold-400/10 text-gold-400 border border-gold-400/20 rounded-xl w-fit">
               <TrendingUp className="w-6 h-6" />
             </div>
@@ -146,12 +146,12 @@ export default function RatesComparisons() {
               <h3 className="font-display font-black text-xl text-white">
                 The Compound Math Advantage
               </h3>
-              <p className="text-xs text-slate-400 leading-relaxed">
+              <p className="text-sm text-slate-400 leading-relaxed">
                 A balance of $25,000 kept in Bank Bitachon savings earns over $1,212 in guaranteed interest in twelve months, compared to just $110 at typical Wall Street mega institutions.
               </p>
             </div>
 
-            <div className="p-3.5 bg-slate-950/60 rounded-xl border border-slate-850 flex items-start gap-2 text-[10px] text-slate-400">
+            <div className="p-3.5 bg-slate-950/60 rounded-xl border border-slate-850 flex items-start gap-2 text-xs text-slate-400 leading-relaxed">
               <AlertCircle className="w-4 h-4 text-gold-400 flex-shrink-0" />
               <span>Yield average index based on FDIC state findings published May 2026. Rate comparisons do not represent promotional constraints.</span>
             </div>
@@ -161,7 +161,7 @@ export default function RatesComparisons() {
                 const element = document.getElementById('calcs');
                 element?.scrollIntoView({ behavior: 'smooth' });
               }}
-              className="w-full inline-flex items-center justify-center gap-1.5 bg-gradient-to-r from-gold-500 to-gold-600 text-slate-950 font-bold text-xs uppercase py-3 rounded-lg shadow-lg hover:shadow-gold-500/10 active:scale-98 transition-all cursor-pointer"
+              className="w-full min-h-12 inline-flex items-center justify-center gap-1.5 bg-gradient-to-r from-gold-500 to-gold-600 text-slate-950 font-bold text-sm uppercase py-3 rounded-xl shadow-lg hover:shadow-gold-500/10 active:scale-98 transition-all cursor-pointer"
             >
               <span>Simulate Your Yields</span>
               <ArrowRight className="w-4 h-4" />

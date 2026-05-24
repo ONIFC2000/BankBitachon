@@ -9,7 +9,7 @@ import { LogoCloud } from '@/components/ui/logo-cloud-2';
 
 export default function LogoCloudSection() {
   return (
-    <section className="py-20 bg-slate-950 text-white relative overflow-hidden">
+    <section className="py-14 sm:py-20 bg-slate-950 text-white relative overflow-hidden">
       <div className="absolute inset-0 bg-grid-pattern opacity-30 pointer-events-none" />
       <div className="absolute top-0 right-0 w-96 h-96 bg-primary-700/20 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-gold-400/10 rounded-full blur-[120px] pointer-events-none" />

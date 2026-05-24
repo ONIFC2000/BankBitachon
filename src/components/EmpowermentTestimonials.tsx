@@ -132,36 +132,36 @@ export default function EmpowermentTestimonials() {
   const secondRow = testimonials.slice(6);
 
   return (
-    <section className="py-20 bg-slate-950 text-white relative overflow-hidden">
+    <section className="py-12 sm:py-20 bg-slate-950 text-white relative overflow-hidden">
       <div className="absolute inset-0 bg-grid-pattern opacity-30 pointer-events-none" />
       <div className="absolute top-0 right-0 w-96 h-96 bg-primary-700/20 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-gold-400/10 rounded-full blur-[120px] pointer-events-none" />
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="text-center max-w-3xl mx-auto mb-12 space-y-3">
+        <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-12 space-y-3">
           <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-gold-400/10 text-gold-400 border border-gold-400/20 rounded-full text-xs font-bold tracking-wider uppercase font-display">
             <Globe2 className="w-3.5 h-3.5" />
             Global Member Voices
           </span>
-          <h2 className="font-display font-black text-3xl sm:text-4xl text-white tracking-tight leading-snug">
+          <h2 className="font-display font-black text-2xl sm:text-4xl text-white tracking-tight leading-snug">
             Banking trust, proven across borders
           </h2>
-          <p className="text-slate-400 text-sm">
+          <p className="text-slate-400 text-sm sm:text-base leading-relaxed">
             Real Bank Bitachom members describe the fees, support, mobile money, security, and product growth that shape their daily financial lives.
           </p>
         </div>
 
         <div className="relative">
-          <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-slate-950 to-transparent z-10 pointer-events-none" />
-          <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-slate-950 to-transparent z-10 pointer-events-none" />
-          <div className="space-y-5">
-            <TestimonialsCarousel testimonials={firstRow} speed={42} direction="left" cardHeight={340} />
-            <TestimonialsCarousel testimonials={secondRow} speed={48} direction="right" cardHeight={340} />
+          <div className="absolute inset-y-0 left-0 w-10 sm:w-24 bg-gradient-to-r from-slate-950 to-transparent z-10 pointer-events-none" />
+          <div className="absolute inset-y-0 right-0 w-10 sm:w-24 bg-gradient-to-l from-slate-950 to-transparent z-10 pointer-events-none" />
+          <div className="space-y-3 sm:space-y-5">
+            <TestimonialsCarousel testimonials={firstRow} speed={42} direction="left" cardHeight={260} desktopCardHeight={340} />
+            <TestimonialsCarousel testimonials={secondRow} speed={48} direction="right" cardHeight={260} desktopCardHeight={340} />
           </div>
         </div>
 
         <div className="mt-8 flex justify-center">
-          <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-bold text-slate-300 shadow-sm backdrop-blur">
+          <div className="inline-flex max-w-full items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 sm:px-4 py-2 text-xs font-bold text-slate-300 shadow-sm backdrop-blur">
             <ShieldCheck className="w-4 h-4 text-emerald-400" />
             International support is improving fast, and members are noticing
           </div>

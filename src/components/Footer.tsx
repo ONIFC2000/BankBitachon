@@ -3,21 +3,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState } from 'react';
-import { Shield, PhoneCall, Mail, Globe, Sparkles, Send, MapPin } from 'lucide-react';
+import React from 'react';
+import { Shield, PhoneCall, Mail } from 'lucide-react';
 
 export default function Footer() {
-  const [email, setEmail] = useState('');
-  const [subscribed, setSubscribed] = useState(false);
-
-  const handleSubscribe = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email) return;
-    setSubscribed(true);
-    setEmail('');
-    setTimeout(() => setSubscribed(false), 5000);
-  };
-
   return (
     <footer className="bg-slate-950 text-white border-t border-gold-600/30 pt-16 pb-8 select-none">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -50,29 +39,9 @@ export default function Footer() {
                 Subscribe to Financial Reports
               </div>
               
-              {subscribed ? (
-                <div className="p-2.5 bg-emerald-950/40 border border-emerald-900/40 rounded-lg text-[10px] text-emerald-400">
-                  Welcome to our ledger swap. Reports will be sent quarterly.
-                </div>
-              ) : (
-                <form onSubmit={handleSubscribe} className="relative">
-                  <input
-                    type="email"
-                    required
-                    placeholder="Enter email to swap reports"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full bg-slate-900 border border-slate-800 rounded-lg text-xs py-2.5 pl-3 pr-10 hover:border-slate-700 outline-none text-slate-200"
-                  />
-                  <button
-                    type="submit"
-                    className="absolute right-2 top-2 text-gold-400 hover:text-white p-1 cursor-pointer"
-                    aria-label="Subscribe"
-                  >
-                    <Send className="w-4.5 h-4.5" />
-                  </button>
-                </form>
-              )}
+              <p className="text-xs text-slate-500 leading-relaxed">
+                Quarterly reports, disclosures, and member notices should live on a dedicated resources page before this signup returns.
+              </p>
             </div>
           </div>
 
@@ -84,11 +53,11 @@ export default function Footer() {
               <h5 className="font-display font-bold text-xs text-gold-400 uppercase tracking-widest">
                 Deposits
               </h5>
-              <ul className="space-y-2 text-xs text-slate-400 font-medium">
-                <li><a href="#rates" className="hover:text-white transition-colors">Yield Checking</a></li>
-                <li><a href="#rates" className="hover:text-white transition-colors">Compound Savings</a></li>
-                <li><a href="#rates" className="hover:text-white transition-colors">High Yield Certificate</a></li>
-                <li><a href="#rates" className="hover:text-white transition-colors">Individual IRAs</a></li>
+              <ul className="space-y-2 text-xs text-slate-500 font-medium">
+                <li>Yield Checking</li>
+                <li>Compound Savings</li>
+                <li>High Yield Certificate</li>
+                <li>Individual IRAs</li>
               </ul>
             </div>
 
@@ -97,11 +66,11 @@ export default function Footer() {
               <h5 className="font-display font-bold text-xs text-gold-400 uppercase tracking-widest">
                 Lending Pools
               </h5>
-              <ul className="space-y-2 text-xs text-slate-400 font-medium">
-                <li><a href="#calcs" className="hover:text-white transition-colors">Home Mortgage</a></li>
-                <li><a href="#calcs" className="hover:text-white transition-colors">Auto Refinance Loans</a></li>
-                <li><a href="#calcs" className="hover:text-white transition-colors">Consolidation Credit</a></li>
-                <li><a href="#calcs" className="hover:text-white transition-colors">Business Capital</a></li>
+              <ul className="space-y-2 text-xs text-slate-500 font-medium">
+                <li>Home Mortgage</li>
+                <li>Auto Refinance Loans</li>
+                <li>Consolidation Credit</li>
+                <li>Business Capital</li>
               </ul>
             </div>
 
@@ -110,11 +79,11 @@ export default function Footer() {
               <h5 className="font-display font-bold text-xs text-gold-400 uppercase tracking-widest">
                 Support
               </h5>
-              <ul className="space-y-2 text-xs text-slate-400 font-medium">
-                <li><a href="#faqs" className="hover:text-white transition-colors">Help Center FAQs</a></li>
-                <li><a href="#locator" className="hover:text-white transition-colors">ATM ATM Finder</a></li>
-                <li><a href="#rates" className="hover:text-white transition-colors">Fee-Free Promises</a></li>
-                <li><a href="tel:+18005553224" className="hover:text-white transition-colors">Emergency Hotlines</a></li>
+              <ul className="space-y-2 text-xs text-slate-500 font-medium">
+                <li>Help Center FAQs</li>
+                <li>ATM Finder</li>
+                <li>Fee-Free Promises</li>
+                <li><a href="tel:+18005553224" className="text-slate-400 hover:text-white transition-colors">Emergency Hotline</a></li>
               </ul>
             </div>
 

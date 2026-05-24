@@ -83,7 +83,7 @@ export default function AboutUsSection() {
   ]
 
   return (
-    <section id="about-section" className="w-full py-20 bg-slate-50 text-slate-900 overflow-hidden relative">
+    <section id="about-section" className="w-full py-14 sm:py-20 bg-slate-50 text-slate-900 overflow-hidden relative">
       <div className="absolute top-0 inset-x-0 h-4 bg-gradient-to-b from-slate-950/10 to-transparent pointer-events-none" />
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
         <motion.div
@@ -101,7 +101,7 @@ export default function AboutUsSection() {
             Discover Our Mission
           </motion.span>
           <motion.h2
-            className="font-display font-black text-3.5xl sm:text-4.5xl text-slate-900 tracking-tight leading-[1.1]"
+            className="font-display font-black text-3xl sm:text-4.5xl text-slate-900 tracking-tight leading-[1.1]"
             variants={itemVariants}
           >
             About <span className="bg-gradient-to-r from-primary-700 to-gold-600 bg-clip-text text-transparent">Bank Bitachon</span>
@@ -138,7 +138,7 @@ export default function AboutUsSection() {
           </div>
 
           <motion.div
-            className="lg:col-span-4 bg-slate-900 text-white rounded-2xl border border-slate-800/90 shadow-2xl overflow-hidden relative min-h-[520px] flex flex-col justify-between"
+            className="lg:col-span-4 bg-slate-900 text-white rounded-2xl border border-slate-800/90 shadow-2xl overflow-hidden relative min-h-[440px] sm:min-h-[520px] flex flex-col justify-between"
             variants={itemVariants}
             whileHover={{ y: -4, transition: { duration: 0.2 } }}
           >
@@ -158,7 +158,7 @@ export default function AboutUsSection() {
 
               <div>
                 <p className="text-xs uppercase tracking-widest text-slate-400 font-bold mb-2">Secure balance</p>
-                <div className="font-display text-4xl font-black tracking-tight">$48,920.40</div>
+                <div className="font-display text-3xl sm:text-4xl font-black tracking-tight">$48,920.40</div>
                 <div className="mt-2 inline-flex items-center gap-1.5 text-xs font-bold text-emerald-300 bg-emerald-400/10 px-2.5 py-1 rounded-lg">
                   <CheckCircle className="w-3.5 h-3.5" />
                   Protected by Bitachon Shield
@@ -220,7 +220,7 @@ interface ServiceItemProps {
 function ServiceItem({ icon, title, description, variants }: ServiceItemProps) {
   return (
     <motion.div
-      className="group bg-white border border-slate-200 rounded-2xl p-6 shadow-sm hover:shadow-xl hover:border-slate-300 transition-all relative overflow-hidden"
+      className="group bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-sm hover:shadow-xl hover:border-slate-300 transition-all relative overflow-hidden"
       variants={variants}
       whileHover={{ y: -4, transition: { duration: 0.2 } }}
     >

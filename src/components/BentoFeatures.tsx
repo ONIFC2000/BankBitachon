@@ -40,22 +40,22 @@ export default function BentoFeatures({ onNavigateToSection, onOpenSelfLogin }: 
   };
 
   return (
-    <section id="bento-features" className="py-20 bg-slate-50 relative overflow-hidden">
+    <section id="bento-features" className="py-14 sm:py-20 bg-slate-50 relative overflow-hidden">
       {/* Curved Visual Cut Section */}
       <div className="absolute top-0 inset-x-0 h-4 bg-gradient-to-b from-slate-950/10 to-transparent pointer-events-none" />
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         
         {/* Core Tag Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
+        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-16 space-y-3">
           <span className="inline-flex items-center gap-1 px-3 py-1 bg-primary-100 text-primary-800 rounded-full text-xs font-bold tracking-wider uppercase font-display">
             <Sparkles className="w-3.5 h-3.5" />
             Class-Leading Financial Design
           </span>
-          <h2 className="font-display font-black text-3.5xl sm:text-4.5xl text-slate-900 tracking-tight leading-[1.1]">
+          <h2 className="font-display font-black text-3xl sm:text-4.5xl text-slate-900 tracking-tight leading-[1.1]">
             Why smart money chooses <span className="bg-gradient-to-r from-primary-700 to-gold-600 bg-clip-text text-transparent">Bank Bitachon</span>
           </h2>
-          <p className="text-slate-600 text-base">
+          <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
             We combined the member-centric rates of a traditional credit union with the state-of-the-art security armor of a multi-tiered cryptographic vault.
           </p>
         </div>
@@ -71,7 +71,7 @@ export default function BentoFeatures({ onNavigateToSection, onOpenSelfLogin }: 
           {/* Card 1: Main High Yield Savings Promotion (Huge Width 8/12) */}
           <motion.div 
             variants={itemVariants}
-            className="md:col-span-8 bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 flex flex-col md:flex-row gap-8 shadow-sm hover:shadow-xl transition-all group overflow-hidden relative"
+            className="md:col-span-8 bg-white border border-slate-200 rounded-2xl p-4 sm:p-8 flex flex-col md:flex-row gap-6 md:gap-8 shadow-sm hover:shadow-xl transition-all group overflow-hidden relative"
           >
             {/* Background texture helper */}
             <div className="absolute bottom-0 right-0 w-64 h-64 bg-primary-50 rounded-full filter blur-3xl pointer-events-none -mr-16 -mb-16 group-hover:scale-110 transition-transform duration-500" />
@@ -84,10 +84,10 @@ export default function BentoFeatures({ onNavigateToSection, onOpenSelfLogin }: 
                 <h3 className="font-display font-black text-2xl text-slate-900">
                   Dual-Action High Yield Compound Savings
                 </h3>
-                <p className="text-sm text-slate-500 leading-relaxed">
+                <p className="text-sm sm:text-base text-slate-500 leading-relaxed">
                   Earn a secure, guaranteed <strong>4.85% APY</strong> without freezing your funds, worrying about withdrawal thresholds, or fighting hidden subscription fees.
                 </p>
-                <ul className="grid grid-cols-2 gap-2 text-xs text-slate-600 pt-1">
+                <ul className="grid grid-cols-1 min-[420px]:grid-cols-2 gap-2 text-sm text-slate-600 pt-1">
                   <li className="flex items-center gap-1.5"><ShieldCheck className="w-4 h-4 text-emerald-500" /> NCUA Insured</li>
                   <li className="flex items-center gap-1.5"><ShieldCheck className="w-4 h-4 text-emerald-500" /> Daily Interest Comp</li>
                   <li className="flex items-center gap-1.5"><ShieldCheck className="w-4 h-4 text-emerald-500" /> Direct Deposit Boost</li>
@@ -97,7 +97,7 @@ export default function BentoFeatures({ onNavigateToSection, onOpenSelfLogin }: 
               <div className="pt-4">
                 <button 
                   onClick={() => onNavigateToSection('rates')}
-                  className="inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs px-4 py-2.5 rounded-lg transition-colors cursor-pointer"
+                  className="min-h-11 inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm px-4 py-2.5 rounded-xl transition-colors cursor-pointer"
                 >
                   <span>Lock in your 4.85% APY</span>
                   <ChevronRight className="w-4 h-4 text-gold-400 font-bold" />
@@ -108,8 +108,8 @@ export default function BentoFeatures({ onNavigateToSection, onOpenSelfLogin }: 
             {/* Content Image representing smiling professional human */}
             <div className="w-full md:w-56 h-48 md:h-full min-h-[160px] rounded-xl overflow-hidden relative shadow-inner">
               <img 
-                src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=600"
-                alt="Smiling professional happy Bitachon partner"
+                src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&q=80&w=600"
+                alt="Bank Bitachon member reviewing savings on a tablet"
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 referrerPolicy="no-referrer"
               />
@@ -122,7 +122,7 @@ export default function BentoFeatures({ onNavigateToSection, onOpenSelfLogin }: 
           {/* Card 2: 3.99% Auto Loan Promotion (Small Width 4/12) */}
           <motion.div 
             variants={itemVariants}
-            className="md:col-span-4 bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 flex flex-col justify-between shadow-sm hover:shadow-xl transition-all group overflow-hidden relative"
+            className="md:col-span-4 bg-white border border-slate-200 rounded-2xl p-4 sm:p-8 flex flex-col justify-between shadow-sm hover:shadow-xl transition-all group overflow-hidden relative"
           >
             <div className="space-y-4">
               <div className="p-3 bg-gold-200/20 text-gold-600 rounded-xl w-fit">
@@ -134,7 +134,7 @@ export default function BentoFeatures({ onNavigateToSection, onOpenSelfLogin }: 
                   Unbeatable 3.99% APR Auto Loans
                 </h3>
               </div>
-              <p className="text-xs text-slate-500 leading-relaxed">
+              <p className="text-sm text-slate-500 leading-relaxed">
                 Save an average of $94/month when migrating your active auto lending from high-rate dealer financing to pre-qualified Bitachon reserves.
               </p>
             </div>
@@ -142,7 +142,7 @@ export default function BentoFeatures({ onNavigateToSection, onOpenSelfLogin }: 
             <div className="pt-6 border-t border-slate-100 flex items-center justify-between">
               <button 
                 onClick={() => onNavigateToSection('calcs')}
-                className="text-xs font-bold text-primary-700 hover:text-primary-800 flex items-center gap-1 hover:underline cursor-pointer"
+                className="min-h-11 text-sm font-bold text-primary-700 hover:text-primary-800 flex items-center gap-1 hover:underline cursor-pointer"
               >
                 Estimate Loans <ChevronRight className="w-4 h-4" />
               </button>
@@ -155,7 +155,7 @@ export default function BentoFeatures({ onNavigateToSection, onOpenSelfLogin }: 
           {/* Card 3: Home Loans Mortgages (Small Width 4/12) */}
           <motion.div 
             variants={itemVariants}
-            className="md:col-span-4 bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 flex flex-col justify-between shadow-sm hover:shadow-xl transition-all group overflow-hidden relative"
+            className="md:col-span-4 bg-white border border-slate-200 rounded-2xl p-4 sm:p-8 flex flex-col justify-between shadow-sm hover:shadow-xl transition-all group overflow-hidden relative"
           >
             <div className="space-y-4">
               <div className="p-3 bg-primary-50 text-primary-700 rounded-xl w-fit">
@@ -167,7 +167,7 @@ export default function BentoFeatures({ onNavigateToSection, onOpenSelfLogin }: 
                   Low-Cost Home Mortgages
                 </h3>
               </div>
-              <p className="text-xs text-slate-500 leading-relaxed">
+              <p className="text-sm text-slate-500 leading-relaxed">
                 Unlock specialized first-time homeowner assistance, quick lock-in rates, and zero commission broker fees.
               </p>
             </div>
@@ -175,7 +175,7 @@ export default function BentoFeatures({ onNavigateToSection, onOpenSelfLogin }: 
             <div className="pt-6 border-t border-slate-100 flex items-center justify-between">
               <button 
                 onClick={() => onNavigateToSection('calcs')}
-                className="text-xs font-bold text-primary-700 hover:text-primary-800 flex items-center gap-1 hover:underline cursor-pointer"
+                className="min-h-11 text-sm font-bold text-primary-700 hover:text-primary-800 flex items-center gap-1 hover:underline cursor-pointer"
               >
                 Mortgage Help <ChevronRight className="w-4 h-4" />
               </button>
@@ -186,15 +186,15 @@ export default function BentoFeatures({ onNavigateToSection, onOpenSelfLogin }: 
           {/* Card 4: Business Commercial Advisory (Huge Width 8/12) */}
           <motion.div 
             variants={itemVariants}
-            className="md:col-span-8 bg-slate-900 text-white rounded-2xl p-6 sm:p-8 flex flex-col md:flex-row gap-8 shadow-sm hover:shadow-xl transition-all group overflow-hidden relative"
+            className="md:col-span-8 bg-slate-900 text-white rounded-2xl p-4 sm:p-8 flex flex-col md:flex-row gap-6 md:gap-8 shadow-sm hover:shadow-xl transition-all group overflow-hidden relative"
           >
             {/* Background glowing effects */}
             <div className="absolute top-0 right-0 w-80 h-80 bg-gold-400/5 rounded-full filter blur-3xl pointer-events-none" />
             
             <div className="w-full md:w-56 h-48 md:h-full min-h-[160px] rounded-xl overflow-hidden relative shadow-md order-last md:order-first">
               <img 
-                src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=600"
-                alt="Confident small business customer"
+                src="https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&q=80&w=600"
+                alt="Small business team reviewing commercial banking plans"
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 referrerPolicy="no-referrer"
               />
@@ -218,10 +218,10 @@ export default function BentoFeatures({ onNavigateToSection, onOpenSelfLogin }: 
 
               <div className="pt-4 border-t border-slate-800/80 flex items-center justify-between">
                 <button 
-                  onClick={() => onNavigateToSection('business')}
-                  className="text-xs font-bold text-gold-400 hover:text-gold-300 flex items-center gap-1 hover:underline cursor-pointer"
+                  onClick={() => onNavigateToSection('calcs')}
+                  className="min-h-11 text-sm font-bold text-gold-400 hover:text-gold-300 flex items-center gap-1 hover:underline cursor-pointer"
                 >
-                  Schedule Commercial Consulting <ChevronRight className="w-4 h-4" />
+                  Estimate Business Capital <ChevronRight className="w-4 h-4" />
                 </button>
                 <span className="text-xs text-emerald-400 font-bold">Safe Deposit SBA</span>
               </div>

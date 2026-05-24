@@ -18,6 +18,7 @@ type Logo = {
   label: string;
   sublabel?: string;
   className?: string;
+  imageWrapClassName?: string;
 };
 
 const logos: Logo[] = [
@@ -26,7 +27,8 @@ const logos: Logo[] = [
     alt: "Lead Bank Logo",
     label: "Lead Bank",
     sublabel: "Banking rails",
-    className: "max-h-9 brightness-0 invert",
+    className: "h-14 w-44",
+    imageWrapClassName: "h-16",
   },
   {
     src: visaLogo,
@@ -73,7 +75,7 @@ export function LogoCloud({ className, ...props }: LogoCloudProps) {
   return (
     <motion.div
       className={cn(
-        "relative grid grid-cols-1 overflow-hidden rounded-3xl border border-white/10 bg-slate-950/80 shadow-2xl sm:grid-cols-2 lg:grid-cols-7",
+        "relative grid grid-cols-1 overflow-hidden rounded-3xl border border-white/10 bg-slate-950/80 shadow-2xl sm:grid-cols-2 lg:grid-cols-8",
         className
       )}
       initial={{ opacity: 0, y: 20, scale: 0.98 }}
@@ -110,7 +112,8 @@ function LogoCard({ logo, index, className, children, ...props }: LogoCardProps)
   return (
     <motion.div
       className={cn(
-        "relative flex min-h-36 flex-col items-center justify-center gap-3 border-b border-white/10 bg-white/[0.03] px-5 py-8 text-center transition-colors hover:bg-white/[0.07] sm:border-r lg:border-b-0",
+        "relative flex min-h-28 sm:min-h-36 flex-col items-center justify-center gap-3 border-b border-white/10 bg-white/[0.03] px-5 py-6 sm:py-8 text-center transition-colors hover:bg-white/[0.07] sm:border-r lg:border-b-0",
+        index === 0 && "lg:col-span-2",
         index === 6 && "sm:col-span-2 lg:col-span-1 lg:border-r-0",
         className
       )}
@@ -127,10 +130,10 @@ function LogoCard({ logo, index, className, children, ...props }: LogoCardProps)
       whileHover={{ opacity: 1, y: -6, scale: 1.03 }}
       {...props}
     >
-      <div className="flex h-10 items-center justify-center">
+      <div className={cn("flex h-10 items-center justify-center", logo.imageWrapClassName)}>
         <img
           alt={logo.alt}
-          className={cn("pointer-events-none max-h-8 max-w-36 select-none object-contain", logo.className)}
+          className={cn("pointer-events-none h-8 w-32 select-none object-contain", logo.className)}
           src={logo.src}
         />
       </div>

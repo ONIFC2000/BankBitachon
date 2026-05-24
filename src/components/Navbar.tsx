@@ -9,15 +9,8 @@ import {
   Shield, 
   Menu, 
   X, 
-  ChevronDown, 
-  Globe, 
   Lock, 
-  PhoneCall, 
-  Search, 
-  CreditCard,
-  Briefcase,
-  Users,
-  Percent
+  PhoneCall
 } from 'lucide-react';
 
 interface NavbarProps {
@@ -42,45 +35,11 @@ export default function Navbar({
   setActiveTab
 }: NavbarProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [language, setLanguage] = useState('English');
-  const [isLangOpen, setIsLangOpen] = useState(false);
-
-  const navigationItems = [
-    { 
-      name: 'Personal Banking', 
-      id: 'personal',
-      icon: <Users className="w-4 h-4 text-primary-600" />,
-      subItems: ['High-Yield Checking', 'Compound Savings', 'Credit Cards', 'Personal Loans'] 
-    },
-    { 
-      name: 'Lending & Mortgages', 
-      id: 'lending',
-      icon: <Percent className="w-4 h-4 text-primary-600" />,
-      subItems: ['Home Mortgages', 'Auto Loans', 'Refinance Solutions', 'Rate Lock Promise'] 
-    },
-    { 
-      name: 'Business Solutions', 
-      id: 'business',
-      icon: <Briefcase className="w-4 h-4 text-primary-600" />,
-      subItems: ['Business Checking', 'Commercial Loans', 'Merchant Services', 'Capital Advisory'] 
-    },
-    { 
-      name: 'Help & Security', 
-      id: 'security',
-      icon: <Shield className="w-4 h-4 text-primary-600" />,
-      subItems: ['256-bit Encryption', 'MFA Protocols', 'Report Lost Card', 'Fraud Department'] 
-    }
-  ];
-
-  const languages = ['English', 'Español', 'Français', 'עברית'];
 
   const handleNavClick = (sectionId: string) => {
     setActiveTab('home');
     onNavigateToSection(sectionId);
     setIsMobileMenuOpen(false);
-    setActiveDropdown(null);
   };
 
   return (
@@ -104,54 +63,16 @@ export default function Navbar({
         <div className="flex items-center space-x-6">
           <button 
             onClick={() => handleNavClick('rates')}
-            className="hover:text-gold-400 transition-colors"
+            className="min-h-11 hover:text-gold-400 transition-colors"
           >
             Current Rates
           </button>
           <button 
             onClick={() => handleNavClick('locator')}
-            className="hover:text-gold-400 transition-colors"
+            className="min-h-11 hover:text-gold-400 transition-colors"
           >
             ATMs & Branches
           </button>
-          
-          {/* Language Selector */}
-          <div className="relative">
-            <button 
-              onClick={() => setIsLangOpen(!isLangOpen)}
-              className="flex items-center gap-1 hover:text-gold-400 transition-colors text-slate-300 cursor-pointer"
-            >
-              <Globe className="w-3.5 h-3.5" />
-              <span>{language}</span>
-              <ChevronDown className="w-3 h-3" />
-            </button>
-            <AnimatePresence>
-              {isLangOpen && (
-                <>
-                  <div className="fixed inset-0 z-10" onClick={() => setIsLangOpen(false)} />
-                  <motion.div 
-                    initial={{ opacity: 0, y: 5 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 5 }}
-                    className="absolute right-0 mt-2 w-32 bg-slate-800 border border-slate-700 rounded-md shadow-2xl z-20 py-1"
-                  >
-                    {languages.map((lang) => (
-                      <button
-                        key={lang}
-                        onClick={() => {
-                          setLanguage(lang);
-                          setIsLangOpen(false);
-                        }}
-                        className={`w-full text-left px-3 py-1.5 text-xs hover:bg-slate-700 hover:text-gold-400 transition-colors ${language === lang ? 'text-gold-400 font-semibold' : 'text-slate-300'}`}
-                      >
-                        {lang}
-                      </button>
-                    ))}
-                  </motion.div>
-                </>
-              )}
-            </AnimatePresence>
-          </div>
         </div>
       </div>
 
@@ -179,69 +100,29 @@ export default function Navbar({
 
         {/* Desktop Navigation */}
         <nav className="hidden lg:flex items-center space-x-1" id="desktop-nav">
-          {navigationItems.map((item) => (
-            <div 
-              key={item.id} 
-              className="relative inline-block"
-              onMouseEnter={() => setActiveDropdown(item.id)}
-              onMouseLeave={() => setActiveDropdown(null)}
-            >
-              <button 
-                onClick={() => handleNavClick(item.id)}
-                className={`flex items-center gap-1 px-4 py-2 text-sm font-medium tracking-wide rounded-md transition-all duration-200 cursor-pointer ${
-                  currentSection === item.id 
-                    ? 'text-gold-400 bg-slate-800' 
-                    : 'text-slate-200 hover:text-gold-400 hover:bg-slate-800/60'
-                }`}
-              >
-                {item.name}
-                <ChevronDown className="w-3.5 h-3.5 opacity-70 transition-transform duration-200 group-hover:rotate-180" />
-              </button>
-
-              <AnimatePresence>
-                {activeDropdown === item.id && (
-                  <motion.div 
-                    initial={{ opacity: 0, y: 10, scale: 0.98 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: 10, scale: 0.98 }}
-                    transition={{ duration: 0.15 }}
-                    className="absolute left-0 mt-0.5 w-64 bg-slate-900 border border-slate-700/60 rounded-lg shadow-2xl p-4 z-40"
-                  >
-                    <div className="flex items-center gap-2 pb-2 mb-3 border-b border-slate-800">
-                      {item.icon}
-                      <span className="font-display font-semibold text-xs text-gold-400 tracking-wider uppercase">
-                        {item.name} Solutions
-                      </span>
-                    </div>
-                    <ul className="space-y-1">
-                      {item.subItems.map((sub, i) => (
-                        <li key={i}>
-                          <button
-                            onClick={() => handleNavClick(item.id)}
-                            className="w-full text-left px-2.5 py-1.5 text-xs text-slate-300 hover:text-white rounded hover:bg-slate-800 transition-colors"
-                          >
-                            {sub}
-                          </button>
-                        </li>
-                      ))}
-                    </ul>
-                    <div className="mt-3 pt-3 border-t border-slate-800/80 text-[10px] text-slate-400 flex justify-between items-center">
-                      <span>Proactive Safeguards</span>
-                      <span className="text-emerald-400">NCUA Insured</span>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-          ))}
-          
-          <button 
+          <button
+            onClick={() => handleNavClick('bento-features')}
+            className={`px-4 py-2 text-sm font-medium tracking-wide rounded-md transition-all duration-200 cursor-pointer ${
+              currentSection === 'bento-features' ? 'text-gold-400 bg-slate-800' : 'text-slate-200 hover:text-gold-400 hover:bg-slate-800/60'
+            }`}
+          >
+            Banking Offers
+          </button>
+          <button
             onClick={() => handleNavClick('calcs')}
             className={`px-4 py-2 text-sm font-medium tracking-wide rounded-md transition-all duration-200 cursor-pointer ${
               currentSection === 'calcs' ? 'text-gold-400 bg-slate-800' : 'text-slate-200 hover:text-gold-400 hover:bg-slate-800/60'
             }`}
           >
-            Calculators
+            Simulator
+          </button>
+          <button
+            onClick={() => handleNavClick('faqs')}
+            className={`px-4 py-2 text-sm font-medium tracking-wide rounded-md transition-all duration-200 cursor-pointer ${
+              currentSection === 'faqs' ? 'text-gold-400 bg-slate-800' : 'text-slate-200 hover:text-gold-400 hover:bg-slate-800/60'
+            }`}
+          >
+            FAQs
           </button>
         </nav>
 
@@ -267,21 +148,13 @@ export default function Navbar({
               </button>
             </div>
           ) : (
-            <>
-              <button
-                onClick={() => handleNavClick('rates')}
-                className="text-sm font-semibold text-slate-300 hover:text-white hover:underline decoration-gold-400 py-1 px-2.5 mr-1"
-              >
-                Join Us
-              </button>
-              <button
-                onClick={onLoginClick}
-                className="flex items-center gap-2 bg-gradient-to-r from-gold-500 to-gold-600 text-slate-950 px-5 py-2 rounded-lg font-bold text-sm tracking-wide shadow-md hover:shadow-gold-500/20 shadow-neutral-950 hover:from-gold-400 hover:to-gold-550 active:scale-98 transition-all cursor-pointer"
-              >
-                <Lock className="w-4 h-4 fill-slate-950 stroke-2" />
-                <span>Secure Login</span>
-              </button>
-            </>
+            <button
+              onClick={onLoginClick}
+              className="flex items-center gap-2 bg-gradient-to-r from-gold-500 to-gold-600 text-slate-950 px-5 py-2 rounded-lg font-bold text-sm tracking-wide shadow-md hover:shadow-gold-500/20 shadow-neutral-950 hover:from-gold-400 hover:to-gold-550 active:scale-98 transition-all cursor-pointer"
+            >
+              <Lock className="w-4 h-4 fill-slate-950 stroke-2" />
+              <span>Secure Login</span>
+            </button>
           )}
         </div>
 
@@ -290,14 +163,14 @@ export default function Navbar({
           {isLoggedIn && (
             <button
               onClick={() => setActiveTab('dashboard')}
-              className="px-2.5 py-1.5 text-xs font-bold uppercase bg-gold-500 text-slate-950 rounded shadow"
+              className="min-h-11 px-3 py-2 text-xs font-bold uppercase bg-gold-500 text-slate-950 rounded-xl shadow"
             >
               Portal
             </button>
           )}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="p-2 text-slate-300 hover:text-white hover:bg-slate-800 rounded-md transition-colors cursor-pointer"
+            className="min-h-11 min-w-11 p-2 text-slate-300 hover:text-white hover:bg-slate-800 rounded-xl transition-colors cursor-pointer"
             aria-label="Toggle Menu"
           >
             {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -316,57 +189,37 @@ export default function Navbar({
             className="lg:hidden w-full bg-slate-950 border-t border-slate-800"
           >
             <div className="px-5 py-6 space-y-5">
-              {/* Mobile Quick Rate Search */}
-              <div className="relative">
-                <input 
-                  type="text" 
-                  placeholder="Ask Bitachon: How can we help you?"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full bg-slate-900 border border-slate-850 rounded-lg py-2.5 pl-3 pr-10 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-gold-500"
-                />
-                <Search className="absolute right-3.5 top-3 w-4 h-4 text-slate-500" />
-              </div>
-
-              {/* Drawer Navigation Links */}
-              <div className="space-y-4">
-                {navigationItems.map((item) => (
-                  <div key={item.id} className="space-y-2 border-b border-slate-900 pb-3">
-                    <button
-                      onClick={() => handleNavClick(item.id)}
-                      className="w-full flex items-center justify-between text-left font-display font-bold text-sm tracking-wide text-gold-400"
-                    >
-                      <span>{item.name}</span>
-                      <ChevronDown className="w-4 h-4 opacity-50" />
-                    </button>
-                    <div className="grid grid-cols-2 gap-2 pl-2">
-                      {item.subItems.map((sub, idx) => (
-                        <button
-                          key={idx}
-                          onClick={() => handleNavClick(item.id)}
-                          className="text-left text-xs py-1 text-slate-400 hover:text-white"
-                        >
-                          {sub}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-                
-                <div className="grid grid-cols-2 gap-3 pt-2">
-                  <button
-                    onClick={() => handleNavClick('calcs')}
-                    className="flex justify-center items-center py-2.5 border border-slate-850 rounded-lg text-xs font-semibold text-slate-300 hover:text-white"
-                  >
-                    Calculators
-                  </button>
-                  <button
-                    onClick={() => handleNavClick('locator')}
-                    className="flex justify-center items-center py-2.5 border border-slate-850 rounded-lg text-xs font-semibold text-slate-300 hover:text-white"
-                  >
-                    ATMs & Branches
-                  </button>
-                </div>
+              <div className="grid grid-cols-1 gap-3">
+                <button
+                  onClick={() => handleNavClick('rates')}
+                  className="min-h-11 flex justify-center items-center py-2.5 border border-slate-850 rounded-xl text-sm font-semibold text-slate-300 hover:text-white"
+                >
+                  Current Rates
+                </button>
+                <button
+                  onClick={() => handleNavClick('bento-features')}
+                  className="min-h-11 flex justify-center items-center py-2.5 border border-slate-850 rounded-xl text-sm font-semibold text-slate-300 hover:text-white"
+                >
+                  Banking Offers
+                </button>
+                <button
+                  onClick={() => handleNavClick('calcs')}
+                  className="min-h-11 flex justify-center items-center py-2.5 border border-slate-850 rounded-xl text-sm font-semibold text-slate-300 hover:text-white"
+                >
+                  Simulator
+                </button>
+                <button
+                  onClick={() => handleNavClick('locator')}
+                  className="min-h-11 flex justify-center items-center py-2.5 border border-slate-850 rounded-xl text-sm font-semibold text-slate-300 hover:text-white"
+                >
+                  ATMs & Branches
+                </button>
+                <button
+                  onClick={() => handleNavClick('faqs')}
+                  className="min-h-11 flex justify-center items-center py-2.5 border border-slate-850 rounded-xl text-sm font-semibold text-slate-300 hover:text-white"
+                >
+                  FAQs
+                </button>
               </div>
 
               {/* Login action in mobile menu */}
@@ -382,7 +235,7 @@ export default function Navbar({
                         setActiveTab('dashboard');
                         setIsMobileMenuOpen(false);
                       }}
-                      className="w-full bg-primary-700 hover:bg-primary-650 text-white font-bold text-xs uppercase py-3 rounded-lg text-center"
+                      className="w-full min-h-12 bg-primary-700 hover:bg-primary-650 text-white font-bold text-sm uppercase py-3 rounded-xl text-center"
                     >
                       Access Account Dashboard
                     </button>
@@ -391,7 +244,7 @@ export default function Navbar({
                         onLogout();
                         setIsMobileMenuOpen(false);
                       }}
-                      className="text-xs text-red-400 hover:underline pt-1 text-center"
+                      className="min-h-11 text-sm text-red-400 hover:underline pt-1 text-center"
                     >
                       Sign Out Secure Session
                     </button>
@@ -403,18 +256,10 @@ export default function Navbar({
                         onLoginClick();
                         setIsMobileMenuOpen(false);
                       }}
-                      className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-gold-500 to-gold-600 text-slate-950 font-extrabold text-sm py-3.5 rounded-lg tracking-wide shadow-lg cursor-pointer"
+                      className="w-full min-h-12 flex items-center justify-center gap-2 bg-gradient-to-r from-gold-500 to-gold-600 text-slate-950 font-extrabold text-sm py-3.5 rounded-xl tracking-wide shadow-lg cursor-pointer"
                     >
                       <Lock className="w-4 h-4 fill-slate-950" />
                       <span>Access Secure Banking</span>
-                    </button>
-                    <button
-                      onClick={() => {
-                        handleNavClick('rates');
-                      }}
-                      className="text-xs text-slate-400 hover:text-white hover:underline text-center py-1"
-                    >
-                      Become A Member Today
                     </button>
                   </>
                 )}

@@ -20,6 +20,7 @@ interface TestimonialsCarouselProps {
   speed?: number;
   direction?: "left" | "right";
   cardHeight?: number;
+  desktopCardHeight?: number;
   className?: string;
 }
 
@@ -28,6 +29,7 @@ export const TestimonialsCarousel: React.FC<TestimonialsCarouselProps> = ({
   speed = 20,
   direction = "left",
   cardHeight = 200,
+  desktopCardHeight = cardHeight,
   className,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -58,8 +60,11 @@ export const TestimonialsCarousel: React.FC<TestimonialsCarouselProps> = ({
           <motion.div
             key={`${name}-${index}`}
             whileHover={{ scale: 1.03, y: -4 }}
-            className="bg-white my-3 border border-slate-200 shadow-sm hover:shadow-xl rounded-2xl p-5 flex-shrink-0 w-[360px] sm:w-[430px] transition-shadow relative overflow-hidden"
-            style={{ height: cardHeight }}
+            className="bg-white my-2 sm:my-3 border border-slate-200 shadow-sm hover:shadow-xl rounded-2xl p-3.5 sm:p-5 flex-shrink-0 w-[72vw] max-w-[280px] sm:w-[430px] sm:max-w-none h-[var(--mobile-card-height)] sm:h-[var(--desktop-card-height)] transition-shadow relative overflow-hidden"
+            style={{
+              "--mobile-card-height": `${cardHeight}px`,
+              "--desktop-card-height": `${desktopCardHeight}px`,
+            } as React.CSSProperties}
           >
             <div className="absolute bottom-0 right-0 w-40 h-40 bg-primary-50 rounded-full blur-3xl pointer-events-none -mr-14 -mb-14" />
             <div className="relative z-10 flex h-full flex-col justify-between">
@@ -71,8 +76,8 @@ export const TestimonialsCarousel: React.FC<TestimonialsCarouselProps> = ({
                   </span>
                   {rating && <span className="text-gold-500 text-xs tracking-tight">{rating}</span>}
                 </div>
-                <div className="max-h-[190px] overflow-hidden">
-                  <p className="text-sm leading-relaxed text-slate-600 break-words whitespace-normal">
+                <div className="max-h-[132px] sm:max-h-[190px] overflow-hidden">
+                  <p className="text-xs sm:text-sm leading-relaxed text-slate-600 break-words whitespace-normal">
                     {highlight
                       ? text.split(highlight).map((part, idx, arr) => (
                           <React.Fragment key={idx}>
@@ -85,30 +90,30 @@ export const TestimonialsCarousel: React.FC<TestimonialsCarouselProps> = ({
                       : text}
                   </p>
                   {translation && (
-                    <p className="mt-2 text-xs leading-relaxed text-slate-400 italic">
+                    <p className="mt-2 hidden sm:block text-xs leading-relaxed text-slate-400 italic">
                       {translation}
                     </p>
                   )}
                 </div>
               </div>
 
-              <div className="flex items-center gap-3 pt-4">
+              <div className="flex items-center gap-2.5 sm:gap-3 pt-3 sm:pt-4">
                 {image ? (
                   <img
                     src={image}
                     alt={name}
                     width={50}
                     height={50}
-                    className="h-12 w-12 rounded-xl object-cover border border-slate-200"
+                    className="h-10 w-10 sm:h-12 sm:w-12 rounded-xl object-cover border border-slate-200"
                     referrerPolicy="no-referrer"
                   />
                 ) : (
-                  <div className="h-12 w-12 rounded-xl border border-slate-200 bg-slate-900 text-gold-400 flex items-center justify-center font-display font-black">
+                  <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-xl border border-slate-200 bg-slate-900 text-gold-400 flex items-center justify-center font-display font-black text-sm sm:text-base">
                     {flag ?? name.charAt(0)}
                   </div>
                 )}
                 <div className="flex flex-col min-w-0">
-                  <div className="font-display font-black leading-tight text-slate-900 truncate">{name}</div>
+                  <div className="font-display font-black leading-tight text-slate-900 truncate text-sm sm:text-base">{name}</div>
                   <div className="text-slate-500 text-xs font-semibold truncate">{role}</div>
                 </div>
               </div>

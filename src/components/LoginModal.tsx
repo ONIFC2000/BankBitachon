@@ -100,9 +100,7 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess, setActiveT
           onLoginSuccess(fullName, { initial_balance: newUser?.balance });
         } else {
           const user = sandboxAuthStore.findUserByUsername(username);
-          if (username === 'rebecca_gold' && password === 'bitachonSafe2026') {
-            onLoginSuccess('Rebecca Goldstein', { initial_balance: 5420.75 });
-          } else if (user) {
+          if (user) {
             onLoginSuccess(user.fullName, { initial_balance: user.balance });
           } else {
             // Safe fallback sign-in
@@ -118,12 +116,6 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess, setActiveT
       setErrorMsg(err?.message || 'Something went wrong.');
       setIsSubmitting(false);
     }
-  };
-
-  const handlePrefillDemo = () => {
-    setUsername('rebecca_gold');
-    setPassword('bitachonSafe2026');
-    setErrorMsg('');
   };
 
   if (!isOpen) return null;
@@ -233,17 +225,8 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess, setActiveT
               </div>
 
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex justify-between items-center">
-                  <span>Password</span>
-                  {!isRegisterMode && (
-                    <button 
-                      type="button" 
-                      onClick={handlePrefillDemo}
-                      className="text-[10px] text-gold-400 hover:text-gold-300 font-bold tracking-normal"
-                    >
-                      Fill Demo Pass
-                    </button>
-                  )}
+                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">
+                  Password
                 </label>
                 <input
                   type="password"

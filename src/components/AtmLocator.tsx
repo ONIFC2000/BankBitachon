@@ -36,8 +36,6 @@ export default function AtmLocator() {
 
     if (found) {
       setSelectedLocation(found);
-    } else {
-      alert(`Simulation Match: Bank Bitachon holds a Co-Op terminal/branch near "${zipQuery}". Basel Global HQ selected for display.`);
     }
   };
 
@@ -103,10 +101,10 @@ export default function AtmLocator() {
         </div>
 
         {/* Main interactive section with Mock Map Visual */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 bg-white p-4 rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 bg-white p-4 rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
           
           {/* Left panel: List of Locations (Columns 5/12) */}
-          <div className="lg:col-span-5 h-[480px] overflow-y-auto pr-2 space-y-3 scrollbar">
+          <div className="lg:col-span-5 h-[360px] sm:h-[480px] overflow-y-auto pr-2 space-y-3 scrollbar">
             {filteredLocations.length > 0 ? (
               filteredLocations.map((loc) => {
                 const isSelected = selectedLocation.id === loc.id;
@@ -160,7 +158,7 @@ export default function AtmLocator() {
           <div className="lg:col-span-7 flex flex-col justify-between space-y-6">
             
             {/* Elegant Mock Interactive Map Vector Vector Canvas */}
-            <div className="relative flex-1 bg-slate-900 rounded-2xl h-[280px] overflow-hidden border border-slate-800 select-none">
+            <div className="relative flex-1 bg-slate-900 rounded-2xl h-[240px] sm:h-[280px] overflow-hidden border border-slate-800 select-none">
               
               {/* Simulated Map Background Drawing Grid */}
               <div className="absolute inset-0 bg-slate-950 bg-grid-pattern opacity-40" />

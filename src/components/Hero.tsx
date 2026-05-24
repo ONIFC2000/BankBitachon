@@ -11,7 +11,6 @@ import {
   ChevronRight, 
   TrendingUp, 
   BadgePercent, 
-  UsersRound, 
   Briefcase,
   Lock,
   PiggyBank,
@@ -49,7 +48,7 @@ export default function Hero({
       description: "Put your money in our savings account and watch it grow. You earn 10x more than most banks. No fees. No minimum balance. Take your money out whenever you need it.",
       highlights: ["NCUA Insured to $250k", "No Minimum Balance", "Grows Every Month"],
       ctaText: "Open High-Yield Savings",
-      targetId: "personal",
+      targetId: "rates",
       badge: "Best Savings Rate",
       image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=1200"
     },
@@ -69,7 +68,7 @@ export default function Hero({
       description: "Keep your business money safe and watch it grow. Made for small businesses, startups, and shops. Your money is protected and always easy to access.",
       highlights: ["Free Business Transfers", "Your Own Banking Advisor", "Safe and Protected"],
       ctaText: "Explore Business Services",
-      targetId: "business",
+      targetId: "bento-features",
       badge: "Business Banking",
       image: "https://images.unsplash.com/photo-1556740758-90de374c12ad?auto=format&fit=crop&q=80&w=1200"
     }
@@ -122,24 +121,18 @@ export default function Hero({
     }
   };
 
-  const fillDemoCredentials = () => {
-    setUsername('rebecca_gold');
-    setPassword('bitachonSafe2026');
-    setLoginError('');
-  };
-
   return (
-    <section id="hero" className="relative bg-slate-950 pb-16 pt-6 overflow-hidden bg-grid-pattern">
+    <section id="hero" className="relative bg-slate-950 pb-12 pt-4 sm:pb-16 sm:pt-6 overflow-hidden bg-grid-pattern">
       {/* Decorative Blur Backgrounds */}
       <div className="absolute top-1/4 left-1/10 w-96 h-96 bg-primary-700/10 rounded-full filter blur-[100px] pointer-events-none" />
       <div className="absolute bottom-1/4 right-1/10 w-96 h-96 bg-gold-600/10 rounded-full filter blur-[100px] pointer-events-none" />
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-8 items-center">
           
           {/* Left Panel: Carousel Slider of Rates */}
           <div className="col-span-1 lg:col-span-7 select-none">
-            <div className="min-h-[460px] flex flex-col justify-center">
+            <div className="min-h-0 lg:min-h-[460px] flex flex-col justify-center py-8 lg:py-0">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={activeSlide}
@@ -156,7 +149,7 @@ export default function Hero({
                   </span>
 
                   {/* Main Header Tag */}
-                  <h1 className="font-display font-extrabold text-3.5xl sm:text-4.5xl md:text-5xl text-white tracking-tight leading-[1.1]">
+                  <h1 className="font-display font-extrabold text-3xl sm:text-4.5xl md:text-5xl text-white tracking-tight leading-[1.1]">
                     {marketingSlides[activeSlide].title.split('.').map((part, index) => {
                       if (index === 0 && part) {
                         return <span key={index} className="block">{part}.</span>;
@@ -186,10 +179,10 @@ export default function Hero({
                   </div>
 
                   {/* Buttons */}
-                  <div className="flex flex-wrap items-center gap-4 pt-4">
+                  <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-3 sm:gap-4 pt-4">
                     <button
                       onClick={() => onNavigateToSection(marketingSlides[activeSlide].targetId)}
-                      className="inline-flex items-center gap-2 bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-500 hover:to-primary-600 text-white font-bold text-sm tracking-wide px-6 py-3.5 rounded-lg transition-all shadow-lg hover:shadow-primary-500/15 cursor-pointer"
+                      className="inline-flex w-full sm:w-auto items-center justify-center gap-2 bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-500 hover:to-primary-600 text-white font-bold text-sm tracking-wide px-6 py-3.5 rounded-lg transition-all shadow-lg hover:shadow-primary-500/15 cursor-pointer"
                     >
                       <span>{marketingSlides[activeSlide].ctaText}</span>
                       <ArrowRight className="w-4 h-4" />
@@ -197,7 +190,7 @@ export default function Hero({
                     
                     <button
                       onClick={() => onNavigateToSection('rates')}
-                      className="inline-flex items-center gap-1 text-xs font-semibold text-slate-300 hover:text-white hover:underline uppercase tracking-wider py-1"
+                      className="inline-flex min-h-11 items-center justify-center gap-1 text-sm font-semibold text-slate-300 hover:text-white hover:underline uppercase tracking-wider py-2"
                     >
                       <span>See Comparative Yields</span>
                       <ChevronRight className="w-4 h-4 text-gold-400" />
@@ -207,23 +200,55 @@ export default function Hero({
               </AnimatePresence>
 
               {/* Slider Dots */}
-              <div className="flex items-center space-x-2.5 mt-8">
+              <div className="flex items-center gap-1.5 mt-8 -ml-2">
                 {marketingSlides.map((_, dotIdx) => (
                   <button
                     key={dotIdx}
                     onClick={() => setActiveSlide(dotIdx)}
-                    className={`h-2.5 rounded-full transition-all duration-300 cursor-pointer ${
-                      activeSlide === dotIdx ? 'w-8 bg-gold-400' : 'w-2.5 bg-slate-700 hover:bg-slate-500'
+                    className={`min-h-11 min-w-11 flex items-center justify-center rounded-full transition-all duration-300 cursor-pointer ${
+                      activeSlide === dotIdx ? 'text-gold-400' : 'text-slate-700 hover:text-slate-500'
                     }`}
                     aria-label={`Slide ${dotIdx + 1}`}
-                  />
+                  >
+                    <span className={`h-2.5 rounded-full transition-all duration-300 ${activeSlide === dotIdx ? 'w-8 bg-gold-400' : 'w-2.5 bg-current'}`} />
+                  </button>
                 ))}
               </div>
             </div>
           </div>
 
+          <div className="col-span-1 lg:hidden">
+            <div className="rounded-2xl border border-slate-800/80 bg-slate-900 p-4 shadow-2xl">
+              <div className="flex items-start gap-3">
+                <div className="mt-0.5 rounded-xl bg-gold-400/10 p-3 text-gold-400">
+                  <Lock className="h-5 w-5" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <h3 className="font-display text-lg font-black text-white">Secure banking access</h3>
+                  <p className="mt-1 text-sm leading-relaxed text-slate-400">
+                    Sign in or create an account when you are ready. Your session is protected with encrypted access.
+                  </p>
+                </div>
+              </div>
+              <div className="mt-4 grid grid-cols-1 min-[420px]:grid-cols-2 gap-3">
+                <button
+                  onClick={onOpenSelfLogin}
+                  className="min-h-12 rounded-xl bg-gradient-to-r from-gold-500 to-gold-600 px-4 py-3 text-sm font-extrabold text-slate-950 shadow-lg"
+                >
+                  Secure Login
+                </button>
+                <button
+                  onClick={() => onNavigateToSection('calcs')}
+                  className="min-h-12 rounded-xl border border-slate-800 bg-slate-950 px-4 py-3 text-sm font-bold text-slate-200"
+                >
+                  Run Numbers
+                </button>
+              </div>
+            </div>
+          </div>
+
           {/* Right Panel: Secure Portal Login Card & Floating Human Artwork */}
-          <div className="col-span-1 lg:col-span-5 relative mt-6 lg:mt-0" id="hero-portal-panel">
+          <div className="hidden lg:block col-span-1 lg:col-span-5 relative mt-6 lg:mt-0" id="hero-portal-panel">
             
             {/* Login Box */}
             <motion.div 
@@ -233,7 +258,7 @@ export default function Hero({
               className="w-full bg-slate-900 border border-slate-800/80 rounded-2xl shadow-2xl relative overflow-hidden"
             >
               {/* Card Header Security Banner */}
-              <div className="bg-slate-950 px-6 py-4.5 border-b border-gold-600/30 flex justify-between items-center bg-radial-gradient">
+              <div className="bg-slate-950 px-4 sm:px-6 py-4.5 border-b border-gold-600/30 flex justify-between items-center gap-3 bg-radial-gradient">
                 <div className="flex items-center gap-2.5">
                   <div className="p-1.5 bg-gold-400/10 rounded-md">
                     <ShieldCheck className="w-5 h-5 text-gold-400" />
@@ -255,7 +280,7 @@ export default function Hero({
               </div>
 
               {/* Login States */}
-              <div className="p-6 sm:p-8 space-y-6">
+              <div className="p-4 sm:p-8 space-y-6">
                 {isLoggedIn ? (
                   <div className="space-y-5 text-center py-6">
                     <div className="w-14 h-14 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto border border-emerald-500/30">
@@ -307,13 +332,6 @@ export default function Hero({
                         <label className="text-xs font-bold text-slate-300 uppercase tracking-wider block">
                           Password
                         </label>
-                        <button 
-                          type="button"
-                          onClick={() => alert("Use the 'Demo Pass' button below to try the app!")}
-                          className="text-[10px] text-slate-500 hover:text-gold-400 transition-colors"
-                        >
-                          Forgot password?
-                        </button>
                       </div>
                       <input 
                         type="password"
@@ -346,18 +364,9 @@ export default function Hero({
                       )}
                     </button>
 
-                    {/* Pre-fill Option for Demo */}
                     <div className="pt-4 border-t border-slate-800/80">
-                      <button
-                        type="button"
-                        onClick={fillDemoCredentials}
-                        className="w-full py-2 px-3 bg-slate-950 hover:bg-slate-850 border border-slate-800 rounded-lg text-xs font-semibold text-gold-400 hover:text-gold-300 transition-all text-center flex items-center justify-center gap-2"
-                      >
-                        <UsersRound className="w-3.5 h-3.5" />
-                        <span>Demo Pass: Rebecca Goldstein</span>
-                      </button>
-                      <p className="text-[10px] text-slate-600 text-center mt-2.5">
-                        New here? <button type="button" onClick={onOpenSelfLogin} className="text-slate-400 hover:text-white underline">Create an account</button>
+                      <p className="text-[10px] text-slate-600 text-center">
+                        New here? <button type="button" onClick={onOpenSelfLogin} className="min-h-11 px-2 text-slate-400 hover:text-white underline">Create an account</button>
                       </p>
                     </div>
                   </form>
@@ -378,8 +387,8 @@ export default function Hero({
       </div>
 
       {/* Decorative Human Image banner strip */}
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-16 border-t border-slate-900 pt-10">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-8 lg:mt-16 border-t border-slate-900 pt-8 sm:pt-10">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 text-center">
           <div className="space-y-1">
             <div className="font-display font-black text-2.5xl text-gold-400">4.85% <span className="text-xs">APY</span></div>
             <div className="text-xs font-bold text-slate-400 uppercase tracking-widest">Savings accounts</div>
