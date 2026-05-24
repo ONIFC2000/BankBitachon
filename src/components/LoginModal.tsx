@@ -11,7 +11,7 @@ import { getSupabaseClient, isSupabaseConfigured, sandboxAuthStore } from '../li
 interface LoginModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onLoginSuccess: (userName: string) => void;
+  onLoginSuccess: (userName: string, metadata?: any) => void;
   setActiveTab: (tab: string) => void;
 }
 
@@ -30,13 +30,13 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess, setActiveT
     setErrorMsg('');
 
     if (!username.trim() || !password.trim()) {
-      setErrorMsg('All fields must be completed.');
+      setErrorMsg('Please fill in all fields.');
       return;
     }
 
     if (isRegisterMode) {
       if (!fullName.trim()) {
-        setErrorMsg('Please enter your legal Full Name.');
+        setErrorMsg('Please enter your full name.');
         return;
       }
       if (password !== confirmPassword) {
@@ -44,7 +44,7 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess, setActiveT
         return;
       }
       if (password.length < 6) {
-        setErrorMsg('Security keys must contain at least 6 characters.');
+        setErrorMsg('Password must be at least 6 characters.');
         return;
       }
     }
@@ -75,8 +75,7 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess, setActiveT
             return;
           }
 
-          // If signup is successful, log them in or announce success
-          onLoginSuccess(fullName);
+          onLoginSuccess(fullName, data.user?.user_metadata);
         } else {
           const { data, error } = await supabase.auth.signInWithPassword({
             email,
@@ -90,21 +89,21 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess, setActiveT
           }
 
           const loggedName = data.user?.user_metadata?.full_name || email.split('@')[0];
-          onLoginSuccess(loggedName.charAt(0).toUpperCase() + loggedName.slice(1));
+          onLoginSuccess(loggedName.charAt(0).toUpperCase() + loggedName.slice(1), data.user?.user_metadata);
         }
       } else {
         // Local Sandbox Mode simulation
         await new Promise((resolve) => setTimeout(resolve, 1000));
         
         if (isRegisterMode) {
-          sandboxAuthStore.addUser(username, fullName, parseFloat(selectedBalance));
-          onLoginSuccess(fullName);
+          const newUser = sandboxAuthStore.addUser(username, fullName, parseFloat(selectedBalance));
+          onLoginSuccess(fullName, { initial_balance: newUser?.balance });
         } else {
           const user = sandboxAuthStore.findUserByUsername(username);
           if (username === 'rebecca_gold' && password === 'bitachonSafe2026') {
-            onLoginSuccess('Rebecca Goldstein');
+            onLoginSuccess('Rebecca Goldstein', { initial_balance: 5420.75 });
           } else if (user) {
-            onLoginSuccess(user.fullName);
+            onLoginSuccess(user.fullName, { initial_balance: user.balance });
           } else {
             // Safe fallback sign-in
             onLoginSuccess(username.charAt(0).toUpperCase() + username.slice(1));
@@ -116,7 +115,7 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess, setActiveT
       onClose();
       setActiveTab('dashboard');
     } catch (err: any) {
-      setErrorMsg(err?.message || 'An authentication error occurred.');
+      setErrorMsg(err?.message || 'Something went wrong.');
       setIsSubmitting(false);
     }
   };
@@ -156,17 +155,17 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess, setActiveT
               </div>
               <div>
                 <h3 className="font-display font-black text-sm text-white tracking-wide uppercase">
-                  {isRegisterMode ? 'Enroll Credentials' : 'Secure Core Access'}
+                  {isRegisterMode ? 'Create Account' : 'Sign In'}
                 </h3>
                 <p className="text-[10px] text-emerald-400 flex items-center gap-1 leading-none mt-1">
                   <span className="relative flex h-1.5 w-1.5 mr-1">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                     <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
                   </span>
-                  <span>TLS 1.3 Active</span>
+                  <span>Safe connection</span>
                   <span className="text-slate-600 mx-1">•</span>
                   <span className={isSupabaseConfigured ? "text-amber-400 font-mono text-[9px]" : "text-purple-400 font-mono text-[9px]"}>
-                    {isSupabaseConfigured ? "Supabase live" : "sandbox mode"}
+                    {isSupabaseConfigured ? "Connected" : "Test mode"}
                   </span>
                 </p>
               </div>
@@ -175,7 +174,7 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess, setActiveT
             <button 
               onClick={onClose}
               className="p-1.5 hover:bg-slate-850 rounded-lg text-slate-400 hover:text-white transition-colors cursor-pointer"
-              aria-label="Close credentials popup"
+              aria-label="Close"
             >
               <X className="w-4 h-4" />
             </button>
@@ -184,7 +183,7 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess, setActiveT
           <div className="p-6 sm:p-8 space-y-5">
             {!isSupabaseConfigured && (
               <div className="p-3 bg-purple-950/20 border border-purple-900/30 rounded-xl text-[10px] text-purple-300 leading-normal text-left">
-                💡 <span className="font-bold text-purple-200">Local Sandbox Mode:</span> To connect real user authentication databases, declare <code className="bg-slate-950 px-1 py-0.2 rounded text-amber-400 font-mono">VITE_SUPABASE_URL</code> and <code className="bg-slate-950 px-1 py-0.2 rounded text-amber-400 font-mono">VITE_SUPABASE_ANON_KEY</code> in Settings.
+                💡 <span className="font-bold text-purple-200">Test Mode:</span> If you want to connect a real database, set up your keys in the settings file.
               </div>
             )}
 
@@ -200,7 +199,7 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess, setActiveT
               {isRegisterMode && (
                 <div className="space-y-1">
                   <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                    Legal Full Name
+                    Full Name
                   </label>
                   <input
                     type="text"
@@ -218,7 +217,7 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess, setActiveT
 
               <div className="space-y-1">
                 <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                  Secure ID / Username
+                  Username
                 </label>
                 <input
                   type="text"
@@ -235,7 +234,7 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess, setActiveT
 
               <div className="space-y-1">
                 <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex justify-between items-center">
-                  <span>Secret PIN Code</span>
+                  <span>Password</span>
                   {!isRegisterMode && (
                     <button 
                       type="button" 
@@ -263,7 +262,7 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess, setActiveT
                 <>
                   <div className="space-y-1">
                     <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                      Confirm PIN Code
+                      Confirm Password
                     </label>
                     <input
                       type="password"
@@ -281,17 +280,17 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess, setActiveT
                   {/* Seed Account Balance */}
                   <div className="space-y-1 pt-1.5">
                     <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                      Initial Deposited Vault Allocation
+                      Choose Starting Balance
                     </label>
                     <select
                       value={selectedBalance}
                       onChange={(e) => setSelectedBalance(e.target.value)}
                       className="w-full bg-slate-950 border border-slate-850 focus:border-gold-500 rounded-lg text-xs p-2.5 text-slate-200 outline-none"
                     >
-                      <option value="1500">$1,500 Checking Allocation</option>
-                      <option value="5000">$5,000 Checking & Savings Match</option>
-                      <option value="25000">$25,000 Premium Vault Allocation</option>
-                      <option value="150000">$150,000 High-Capacity Corporate Margin</option>
+                      <option value="1500">$1,500 Checking Account</option>
+                      <option value="5000">$5,000 Checking & Savings</option>
+                      <option value="25000">$25,000 Premium Account</option>
+                      <option value="150000">$150,000 Corporate Account</option>
                     </select>
                   </div>
                 </>
@@ -306,12 +305,12 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess, setActiveT
                 {isSubmitting ? (
                   <>
                     <span className="w-4 h-4 border-2 border-slate-950 border-t-transparent rounded-full animate-spin" />
-                    <span>Verifying Ledger Alignment...</span>
+                    <span>Checking your account...</span>
                   </>
                 ) : (
                   <>
                     <KeyRound className="w-4 h-4 text-slate-950" />
-                    <span>{isRegisterMode ? 'Complete Enrollment' : 'Authenticate Session'}</span>
+                    <span>{isRegisterMode ? 'Create Account' : 'Sign In'}</span>
                   </>
                 )}
               </button>
@@ -326,7 +325,7 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess, setActiveT
                 }}
                 className="text-xs text-slate-400 hover:text-white underline font-semibold transition-colors cursor-pointer"
               >
-                {isRegisterMode ? 'Have an existing trust key? Sign In.' : 'Enroll as a new Mutual Partner.'}
+                {isRegisterMode ? 'Already have an account? Sign in.' : 'New here? Create an account.'}
               </button>
             </div>
           </div>

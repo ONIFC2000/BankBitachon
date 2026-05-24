@@ -18,9 +18,10 @@ import {
   CheckCircle2,
   AlertCircle
 } from 'lucide-react';
+import { getSupabaseClient, isSupabaseConfigured } from '../lib/supabase';
 
 interface HeroProps {
-  onLoginSuccess: (userName: string) => void;
+  onLoginSuccess: (userName: string, metadata?: any) => void;
   onNavigateToSection: (sectionId: string) => void;
   isLoggedIn: boolean;
   onOpenSelfLogin: () => void;
@@ -43,33 +44,33 @@ export default function Hero({
   // Auto scroll rate slides
   const marketingSlides = [
     {
-      title: "Confidence starts with a 4.85% APY.",
+      title: "Earn 4.85% APY on your savings.",
       subtitle: "High-Yield Savings with Bank Bitachon",
-      description: "Secure your capital in our triple-certified savings account. 10x the national average, zero monthly maintenance fees, and immediate liquidity when you need it.",
-      highlights: ["NCUA Insured to $250k", "No Minimum Balance", "Monthly Auto-Compound"],
+      description: "Put your money in our savings account and watch it grow. You earn 10x more than most banks. No fees. No minimum balance. Take your money out whenever you need it.",
+      highlights: ["NCUA Insured to $250k", "No Minimum Balance", "Grows Every Month"],
       ctaText: "Open High-Yield Savings",
       targetId: "personal",
-      badge: "Market Leading Yield",
+      badge: "Best Savings Rate",
       image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=1200"
     },
     {
-      title: "Lock in an Auto Rate of 3.99% APR.",
-      subtitle: "Drive with Certainty & Control",
-      description: "Buy a new car or refinance your existing loan to slash your monthly payments. Pre-qualify online in as little as 3 minutes with zero credit score impact.",
-      highlights: ["90 Days No Payments", "Up to 84-Month Terms", "Refinancing Made Easy"],
+      title: "Get a car loan at just 3.99% APR.",
+      subtitle: "Drive with Confidence",
+      description: "Buy a new car or lower your current car payments. Check your rate in 3 minutes. It will not hurt your credit score.",
+      highlights: ["No Payments for 90 Days", "Up to 84-Month Terms", "Easy to Switch Loans"],
       ctaText: "Calculate Auto Savings",
       targetId: "calcs",
-      badge: "Refinance & Save",
+      badge: "Save on Your Car",
       image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&q=80&w=1200"
     },
     {
-      title: "Your Business Deserves 5.12% APY Reserve Yield.",
-      subtitle: "Capital Management Solutions",
-      description: "Keep your operational assets fluid while earning class-leading returns. Built for modern builders, startups, and pillars of local commerce.",
-      highlights: ["Unlimited Business Ach", "Dedicated Commercial Advisor", "Fraud Lock Guarantees"],
+      title: "Your business earns 5.12% APY.",
+      subtitle: "Business Banking Made Simple",
+      description: "Keep your business money safe and watch it grow. Made for small businesses, startups, and shops. Your money is protected and always easy to access.",
+      highlights: ["Free Business Transfers", "Your Own Banking Advisor", "Safe and Protected"],
       ctaText: "Explore Business Services",
       targetId: "business",
-      badge: "Commercial Solutions",
+      badge: "Business Banking",
       image: "https://images.unsplash.com/photo-1556740758-90de374c12ad?auto=format&fit=crop&q=80&w=1200"
     }
   ];
@@ -81,10 +82,10 @@ export default function Hero({
     return () => clearInterval(timer);
   }, [marketingSlides.length]);
 
-  const handleHeroLogin = (e: React.FormEvent) => {
+  const handleHeroLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!username.trim()) {
-      setLoginError('Please enter a secure Username.');
+      setLoginError('Please enter your username.');
       return;
     }
     if (password.length < 4) {
@@ -94,14 +95,31 @@ export default function Hero({
     
     setIsSubmitting(true);
     setLoginError('');
-    
-    setTimeout(() => {
-      // Capitalize first letter of username for nice display
-      const formattedName = username.charAt(0).toUpperCase() + username.slice(1);
-      onLoginSuccess(formattedName);
+
+    try {
+      if (isSupabaseConfigured) {
+        const supabase = getSupabaseClient();
+        const email = username.includes('@') ? username : `${username.toLowerCase().trim()}@bankbitachon.com`;
+        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) {
+          setLoginError(error.message);
+          setIsSubmitting(false);
+          return;
+        }
+        const meta = data.user?.user_metadata;
+        const loggedName = meta?.full_name || email.split('@')[0];
+        onLoginSuccess(loggedName.charAt(0).toUpperCase() + loggedName.slice(1), meta);
+      } else {
+        await new Promise((resolve) => setTimeout(resolve, 1200));
+        const formattedName = username.charAt(0).toUpperCase() + username.slice(1);
+        onLoginSuccess(formattedName);
+      }
       setIsSubmitting(false);
       setActiveTab('dashboard');
-    }, 1200);
+    } catch (err: any) {
+      setLoginError(err?.message || 'Something went wrong. Try again.');
+      setIsSubmitting(false);
+    }
   };
 
   const fillDemoCredentials = () => {
@@ -244,9 +262,9 @@ export default function Hero({
                       <ShieldCheck className="w-8 h-8 text-emerald-400" />
                     </div>
                     <div className="space-y-1">
-                      <h4 className="font-display font-black text-lg text-white">Access Authenticated!</h4>
+                      <h4 className="font-display font-black text-lg text-white">You're signed in!</h4>
                       <p className="text-xs text-slate-400 max-w-xs mx-auto">
-                        Your secure session has been initiated with Bank Bitachon systems. Enter your dashboard below.
+                        Welcome back. Go to your dashboard to check your accounts.
                       </p>
                     </div>
                     <button
@@ -267,7 +285,7 @@ export default function Hero({
 
                     <div className="space-y-1.5">
                       <label className="text-xs font-bold text-slate-300 uppercase tracking-wider block">
-                        Bitachon Secure ID (Username)
+                        Username
                       </label>
                       <div className="relative">
                         <input 
@@ -287,14 +305,14 @@ export default function Hero({
                     <div className="space-y-1.5">
                       <div className="flex justify-between items-center">
                         <label className="text-xs font-bold text-slate-300 uppercase tracking-wider block">
-                          Access PIN / Password
+                          Password
                         </label>
                         <button 
                           type="button"
-                          onClick={() => alert("Please use the 'Rebecca Goldstein' prefill below to login to test secure functions!")}
+                          onClick={() => alert("Use the 'Demo Pass' button below to try the app!")}
                           className="text-[10px] text-slate-500 hover:text-gold-400 transition-colors"
                         >
-                          Forgot Safe ID?
+                          Forgot password?
                         </button>
                       </div>
                       <input 
@@ -318,12 +336,12 @@ export default function Hero({
                       {isSubmitting ? (
                         <>
                           <span className="w-4 h-4 border-2 border-slate-950 border-t-transparent rounded-full animate-spin" />
-                          <span>Validating Biometrics...</span>
+                          <span>Signing you in...</span>
                         </>
                       ) : (
                         <>
                           <Lock className="w-4 h-4 fill-slate-950" />
-                          <span>Unlock Secure Banking</span>
+                          <span>Log In</span>
                         </>
                       )}
                     </button>
@@ -339,7 +357,7 @@ export default function Hero({
                         <span>Demo Pass: Rebecca Goldstein</span>
                       </button>
                       <p className="text-[10px] text-slate-600 text-center mt-2.5">
-                        Are you a new member? <button type="button" onClick={onOpenSelfLogin} className="text-slate-400 hover:text-white underline">Enroll Credentials</button>
+                        New here? <button type="button" onClick={onOpenSelfLogin} className="text-slate-400 hover:text-white underline">Create an account</button>
                       </p>
                     </div>
                   </form>

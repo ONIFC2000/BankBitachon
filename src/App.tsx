@@ -23,6 +23,7 @@ export default function App() {
   const [activeTab, setActiveTab] = useState<'home' | 'dashboard'>('home');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState('');
+  const [initialBalance, setInitialBalance] = useState<number | undefined>(undefined);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [currentSection, setCurrentSection] = useState('hero');
 
@@ -33,20 +34,29 @@ export default function App() {
       if (supabase) {
         supabase.auth.getSession().then(({ data: { session } }) => {
           if (session?.user) {
-            const name = session.user.user_metadata?.full_name || session.user.email?.split('@')[0];
+            const metadata = session.user.user_metadata;
+            const name = metadata?.full_name || session.user.email?.split('@')[0];
             setUserName(name ? name.charAt(0).toUpperCase() + name.slice(1) : 'Customer');
+            if (metadata?.initial_balance !== undefined) {
+              setInitialBalance(parseFloat(metadata.initial_balance));
+            }
             setIsLoggedIn(true);
           }
         });
 
         const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
           if (session?.user) {
-            const name = session.user.user_metadata?.full_name || session.user.email?.split('@')[0];
+            const metadata = session.user.user_metadata;
+            const name = metadata?.full_name || session.user.email?.split('@')[0];
             setUserName(name ? name.charAt(0).toUpperCase() + name.slice(1) : 'Customer');
+            if (metadata?.initial_balance !== undefined) {
+              setInitialBalance(parseFloat(metadata.initial_balance));
+            }
             setIsLoggedIn(true);
           } else {
             setIsLoggedIn(false);
             setUserName('');
+            setInitialBalance(undefined);
           }
         });
 
@@ -66,8 +76,11 @@ export default function App() {
     }
   };
 
-  const handleLoginSuccess = (name: string) => {
+  const handleLoginSuccess = (name: string, metadata?: any) => {
     setUserName(name);
+    if (metadata?.initial_balance !== undefined) {
+      setInitialBalance(parseFloat(metadata.initial_balance));
+    }
     setIsLoggedIn(true);
   };
 
@@ -80,6 +93,7 @@ export default function App() {
     }
     setIsLoggedIn(false);
     setUserName('');
+    setInitialBalance(undefined);
     setActiveTab('home');
   };
 
@@ -104,6 +118,7 @@ export default function App() {
             userName={userName}
             onLogout={handleLogout}
             setActiveTab={setActiveTab}
+            initialBalance={initialBalance}
           />
         ) : (
           <>

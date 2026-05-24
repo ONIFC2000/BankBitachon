@@ -29,10 +29,18 @@ interface DashboardProps {
   userName: string;
   onLogout: () => void;
   setActiveTab: (tab: string) => void;
+  initialBalance?: number;
 }
 
-export default function Dashboard({ userName, onLogout, setActiveTab }: DashboardProps) {
-  const [accounts, setAccounts] = useState<Account[]>(INITIAL_ACCOUNTS);
+export default function Dashboard({ userName, onLogout, setActiveTab, initialBalance }: DashboardProps) {
+  const [accounts, setAccounts] = useState<Account[]>(() => {
+    if (initialBalance !== undefined) {
+      return INITIAL_ACCOUNTS.map(acc =>
+        acc.id === 'ac1' ? { ...acc, balance: initialBalance } : acc
+      );
+    }
+    return INITIAL_ACCOUNTS;
+  });
   const [transactions, setTransactions] = useState<Transaction[]>(INITIAL_TRANSACTIONS);
   const [activeTransferFrom, setActiveTransferFrom] = useState('ac1');
   const [activeTransferTo, setActiveTransferTo] = useState('ac2');
@@ -171,13 +179,13 @@ export default function Dashboard({ userName, onLogout, setActiveTab }: Dashboar
           <div className="space-y-1 text-left">
             <span className="text-[10px] text-emerald-400 font-bold uppercase tracking-widest flex items-center gap-1.5 h-fit">
               <span className="w-2 h-2 rounded bg-emerald-400 animate-pulse" />
-              Authenticated Secure Sandbox
+              Signed In
             </span>
             <h1 className="font-display font-extrabold text-3xl text-white tracking-tight">
-              Shalom, <span className="text-gold-400 font-sans">{userName}</span>
+              Welcome, <span className="text-gold-400 font-sans">{userName}</span>
             </h1>
             <p className="text-xs text-slate-400">
-              Logged in since {new Date().toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+              Signed in on {new Date().toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
             </p>
           </div>
 
@@ -258,10 +266,10 @@ export default function Dashboard({ userName, onLogout, setActiveTab }: Dashboar
                 </div>
                 <div>
                   <h3 className="font-display font-bold text-sm text-white uppercase tracking-wider">
-                    Instant Trust Wire &amp; Transfer
+                    Send Money
                   </h3>
                   <p className="text-[10px] text-slate-400 leading-none">
-                    No-fee real-time ACH transaction simulation
+                    Move money between your accounts — no fees
                   </p>
                 </div>
               </div>
@@ -334,12 +342,12 @@ export default function Dashboard({ userName, onLogout, setActiveTab }: Dashboar
                     {isTransferring ? (
                       <>
                         <span className="w-3.5 h-3.5 border-2 border-slate-950 border-t-transparent rounded-full animate-spin" />
-                        <span>Confirming Wire Keys...</span>
+                        <span>Sending...</span>
                       </>
                     ) : (
                       <>
                         <Send className="w-3.5 h-3.5" />
-                        <span>Perform Immediate Sweep</span>
+                        <span>Send Now</span>
                       </>
                     )}
                   </button>
@@ -597,7 +605,7 @@ export default function Dashboard({ userName, onLogout, setActiveTab }: Dashboar
             {/* Quick FDIC disclosure */}
             <div className="p-4 bg-slate-900 border border-slate-800 rounded-2xl flex items-start gap-2.5 text-[10px] text-slate-400 line-normal">
               <AlertCircle className="w-4.5 h-4.5 text-gold-400 flex-shrink-0" />
-              <span>Federal statutory limits require account actions to be logged with audit keys. For security instructions, see the digital banking manual. Joint balances are covered to $500,000.</span>
+              <span>We keep your account safe. Your money is protected by the government up to $500,000 for joint accounts. For questions, see our Digital Banking Guide.</span>
             </div>
 
           </div>
