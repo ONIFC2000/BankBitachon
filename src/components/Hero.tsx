@@ -6,39 +6,21 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
-  ShieldCheck, 
   ArrowRight, 
-  ChevronRight, 
-  TrendingUp, 
   BadgePercent, 
-  Briefcase,
   Lock,
-  PiggyBank,
-  CheckCircle2,
-  AlertCircle
 } from 'lucide-react';
-import { getSupabaseClient, isSupabaseConfigured } from '../lib/supabase';
 
 interface HeroProps {
-  onLoginSuccess: (userName: string, metadata?: any) => void;
   onNavigateToSection: (sectionId: string) => void;
-  isLoggedIn: boolean;
   onOpenSelfLogin: () => void;
-  setActiveTab: (tab: string) => void;
 }
 
 export default function Hero({ 
-  onLoginSuccess, 
   onNavigateToSection, 
-  isLoggedIn,
-  onOpenSelfLogin,
-  setActiveTab
+  onOpenSelfLogin
 }: HeroProps) {
   const [activeSlide, setActiveSlide] = useState(0);
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [loginError, setLoginError] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Auto scroll rate slides
   const marketingSlides = [
@@ -81,58 +63,28 @@ export default function Hero({
     return () => clearInterval(timer);
   }, [marketingSlides.length]);
 
-  const handleHeroLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!username.trim()) {
-      setLoginError('Please enter your username.');
-      return;
-    }
-    if (password.length < 4) {
-      setLoginError('Password must be at least 4 characters.');
-      return;
-    }
-    
-    setIsSubmitting(true);
-    setLoginError('');
-
-    try {
-      if (isSupabaseConfigured) {
-        const supabase = getSupabaseClient();
-        const email = username.includes('@') ? username : `${username.toLowerCase().trim()}@bankbitachon.com`;
-        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) {
-          setLoginError(error.message);
-          setIsSubmitting(false);
-          return;
-        }
-        const meta = data.user?.user_metadata;
-        const loggedName = meta?.full_name || email.split('@')[0];
-        onLoginSuccess(loggedName.charAt(0).toUpperCase() + loggedName.slice(1), meta);
-      } else {
-        await new Promise((resolve) => setTimeout(resolve, 1200));
-        const formattedName = username.charAt(0).toUpperCase() + username.slice(1);
-        onLoginSuccess(formattedName);
-      }
-      setIsSubmitting(false);
-      setActiveTab('dashboard');
-    } catch (err: any) {
-      setLoginError(err?.message || 'Something went wrong. Try again.');
-      setIsSubmitting(false);
-    }
-  };
-
   return (
-    <section id="hero" className="relative bg-slate-950 pb-12 pt-4 sm:pb-16 sm:pt-6 overflow-hidden bg-grid-pattern">
-      {/* Decorative Blur Backgrounds */}
-      <div className="absolute top-1/4 left-1/10 w-96 h-96 bg-primary-700/10 rounded-full filter blur-[100px] pointer-events-none" />
-      <div className="absolute bottom-1/4 right-1/10 w-96 h-96 bg-gold-600/10 rounded-full filter blur-[100px] pointer-events-none" />
+    <section id="hero" className="relative overflow-hidden bg-slate-950 py-12 sm:py-16 lg:py-20">
+      <AnimatePresence mode="wait">
+        <motion.img
+          key={marketingSlides[activeSlide].image}
+          src={marketingSlides[activeSlide].image}
+          alt=""
+          initial={{ opacity: 0, scale: 1.04 }}
+          animate={{ opacity: 0.22, scale: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.7, ease: 'easeOut' }}
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+      </AnimatePresence>
+      <div className="absolute inset-0 bg-slate-950/80" />
+      <div className="absolute inset-0 bg-grid-pattern opacity-35" />
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-8 items-center">
           
-          {/* Left Panel: Carousel Slider of Rates */}
-          <div className="col-span-1 lg:col-span-7 select-none">
-            <div className="min-h-0 lg:min-h-[460px] flex flex-col justify-center py-8 lg:py-0">
+          <div className="col-span-1 lg:col-span-8 select-none">
+            <div className="min-h-0 max-w-3xl py-6 lg:py-8">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={activeSlide}
@@ -140,45 +92,25 @@ export default function Hero({
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: 15 }}
                   transition={{ duration: 0.4, ease: "easeOut" }}
-                  className="space-y-6"
+                  className="space-y-5"
                 >
-                  {/* Badge */}
                   <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-gold-400/10 text-gold-400 ring-1 ring-gold-400/30 rounded-full text-xs font-semibold tracking-wider uppercase font-display">
                     <BadgePercent className="w-4 h-4" />
                     {marketingSlides[activeSlide].badge}
                   </span>
 
-                  {/* Main Header Tag */}
-                  <h1 className="font-display font-extrabold text-3xl sm:text-4.5xl md:text-5xl text-white tracking-tight leading-[1.1]">
-                    {marketingSlides[activeSlide].title.split('.').map((part, index) => {
-                      if (index === 0 && part) {
-                        return <span key={index} className="block">{part}.</span>;
-                      }
-                      return <span key={index} className="text-gold-400 block mt-1">{part}</span>;
-                    })}
+                  <h1 className="font-display text-4xl font-black leading-tight tracking-tight text-white sm:text-5xl">
+                    {marketingSlides[activeSlide].title}
                   </h1>
 
-                  {/* Subtitle */}
-                  <h3 className="text-lg font-bold text-slate-300 font-sans tracking-wide">
+                  <h3 className="text-lg font-bold text-gold-300">
                     {marketingSlides[activeSlide].subtitle}
                   </h3>
 
-                  {/* Description */}
                   <p className="text-slate-400 text-sm sm:text-base leading-relaxed max-w-xl">
                     {marketingSlides[activeSlide].description}
                   </p>
 
-                  {/* Bullet Achievements */}
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
-                    {marketingSlides[activeSlide].highlights.map((highlight, idx) => (
-                      <div key={idx} className="flex items-center gap-2 text-xs text-slate-200 bg-slate-900/40 p-2.5 rounded-lg border border-slate-800/40">
-                        <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
-                        <span className="font-semibold tracking-wide">{highlight}</span>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Buttons */}
                   <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-3 sm:gap-4 pt-4">
                     <button
                       onClick={() => onNavigateToSection(marketingSlides[activeSlide].targetId)}
@@ -189,11 +121,11 @@ export default function Hero({
                     </button>
                     
                     <button
-                      onClick={() => onNavigateToSection('rates')}
-                      className="inline-flex min-h-11 items-center justify-center gap-1 text-sm font-semibold text-slate-300 hover:text-white hover:underline uppercase tracking-wider py-2"
+                      onClick={onOpenSelfLogin}
+                      className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-slate-700 bg-slate-950/50 px-5 text-sm font-bold text-slate-200 hover:border-gold-400 hover:text-white"
                     >
-                      <span>See Comparative Yields</span>
-                      <ChevronRight className="w-4 h-4 text-gold-400" />
+                      <Lock className="h-4 w-4 text-gold-400" />
+                      <span>Sign in</span>
                     </button>
                   </div>
                 </motion.div>
@@ -247,164 +179,6 @@ export default function Hero({
             </div>
           </div>
 
-          {/* Right Panel: Secure Portal Login Card & Floating Human Artwork */}
-          <div className="hidden lg:block col-span-1 lg:col-span-5 relative mt-6 lg:mt-0" id="hero-portal-panel">
-            
-            {/* Login Box */}
-            <motion.div 
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.15, duration: 0.5 }}
-              className="w-full bg-slate-900 border border-slate-800/80 rounded-2xl shadow-2xl relative overflow-hidden"
-            >
-              {/* Card Header Security Banner */}
-              <div className="bg-slate-950 px-4 sm:px-6 py-4.5 border-b border-gold-600/30 flex justify-between items-center gap-3 bg-radial-gradient">
-                <div className="flex items-center gap-2.5">
-                  <div className="p-1.5 bg-gold-400/10 rounded-md">
-                    <ShieldCheck className="w-5 h-5 text-gold-400" />
-                  </div>
-                  <div>
-                    <h3 className="font-display font-bold text-sm text-white uppercase tracking-wider">
-                      Secure Bitachon Portal
-                    </h3>
-                    <p className="text-[10px] text-emerald-400 flex items-center gap-1">
-                      <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full inline-block animate-pulse" />
-                      Encrypted session active
-                    </p>
-                  </div>
-                </div>
-                
-                <span className="font-mono text-[9px] text-slate-500 bg-slate-900 px-2 py-1 rounded border border-slate-800 tracking-wider">
-                  MFA-READY
-                </span>
-              </div>
-
-              {/* Login States */}
-              <div className="p-4 sm:p-8 space-y-6">
-                {isLoggedIn ? (
-                  <div className="space-y-5 text-center py-6">
-                    <div className="w-14 h-14 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto border border-emerald-500/30">
-                      <ShieldCheck className="w-8 h-8 text-emerald-400" />
-                    </div>
-                    <div className="space-y-1">
-                      <h4 className="font-display font-black text-lg text-white">You're signed in!</h4>
-                      <p className="text-xs text-slate-400 max-w-xs mx-auto">
-                        Welcome back. Go to your dashboard to check your accounts.
-                      </p>
-                    </div>
-                    <button
-                      onClick={() => setActiveTab('dashboard')}
-                      className="w-full bg-gradient-to-r from-gold-500 to-gold-600 hover:from-gold-400 hover:to-gold-550 text-slate-950 font-extrabold text-sm py-3 rounded-lg shadow-md transition-all active:scale-98 cursor-pointer"
-                    >
-                      Go to Account Dashboard
-                    </button>
-                  </div>
-                ) : (
-                  <form onSubmit={handleHeroLogin} className="space-y-4">
-                    {loginError && (
-                      <div className="p-3 bg-red-950/40 border border-red-800/50 rounded-lg flex items-start gap-2 text-xs text-red-300">
-                        <AlertCircle className="w-4 h-4 text-red-400 flex-shrink-0 mt-0.5" />
-                        <span>{loginError}</span>
-                      </div>
-                    )}
-
-                    <div className="space-y-1.5">
-                      <label className="text-xs font-bold text-slate-300 uppercase tracking-wider block">
-                        Username
-                      </label>
-                      <div className="relative">
-                        <input 
-                          type="text"
-                          required
-                          placeholder="Enter username"
-                          value={username}
-                          onChange={(e) => {
-                            setUsername(e.target.value);
-                            setLoginError('');
-                          }}
-                          className="w-full bg-slate-950 border border-slate-850 focus:border-gold-500 focus:ring-1 focus:ring-gold-500/30 rounded-lg py-3 px-4 text-sm text-white placeholder-slate-600 focus:outline-none transition-all"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="space-y-1.5">
-                      <div className="flex justify-between items-center">
-                        <label className="text-xs font-bold text-slate-300 uppercase tracking-wider block">
-                          Password
-                        </label>
-                      </div>
-                      <input 
-                        type="password"
-                        required
-                        placeholder="••••••••"
-                        value={password}
-                        onChange={(e) => {
-                          setPassword(e.target.value);
-                          setLoginError('');
-                        }}
-                        className="w-full bg-slate-950 border border-slate-850 focus:border-gold-500 focus:ring-1 focus:ring-gold-500/30 rounded-lg py-3 px-4 text-sm text-white placeholder-slate-600 focus:outline-none transition-all"
-                      />
-                    </div>
-
-                    <button 
-                      type="submit"
-                      disabled={isSubmitting}
-                      className="w-full bg-gradient-to-r from-gold-500 to-gold-600 hover:from-gold-400 hover:to-gold-550 text-slate-950 font-extrabold text-sm py-3.5 rounded-lg tracking-wide shadow-lg active:scale-[0.99] disabled:opacity-50 disabled:pointer-events-none transition-all flex items-center justify-center gap-2 cursor-pointer mt-2"
-                    >
-                      {isSubmitting ? (
-                        <>
-                          <span className="w-4 h-4 border-2 border-slate-950 border-t-transparent rounded-full animate-spin" />
-                          <span>Signing you in...</span>
-                        </>
-                      ) : (
-                        <>
-                          <Lock className="w-4 h-4 fill-slate-950" />
-                          <span>Log In</span>
-                        </>
-                      )}
-                    </button>
-
-                    <div className="pt-4 border-t border-slate-800/80">
-                      <p className="text-[10px] text-slate-600 text-center">
-                        New here? <button type="button" onClick={onOpenSelfLogin} className="min-h-11 px-2 text-slate-400 hover:text-white underline">Create an account</button>
-                      </p>
-                    </div>
-                  </form>
-                )}
-              </div>
-            </motion.div>
-
-            {/* Float Badge below: FDIC/NCUA assurance */}
-            <div className="mt-4 flex justify-between items-center text-slate-500 text-[10px] font-sans px-2">
-              <span className="flex items-center gap-1">
-                <ShieldCheck className="w-3 h-3 text-emerald-400" />
-                Federal Reserve Guard
-              </span>
-              <span>NCUA insured to $250,000</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Decorative Human Image banner strip */}
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-8 lg:mt-16 border-t border-slate-900 pt-8 sm:pt-10">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 text-center">
-          <div className="space-y-1">
-            <div className="font-display font-black text-2.5xl text-gold-400">4.85% <span className="text-xs">APY</span></div>
-            <div className="text-xs font-bold text-slate-400 uppercase tracking-widest">Savings accounts</div>
-          </div>
-          <div className="space-y-1">
-            <div className="font-display font-black text-2.5xl text-gold-400">3.99% <span className="text-xs">APR</span></div>
-            <div className="text-xs font-bold text-slate-400 uppercase tracking-widest">Auto vehicle refinance</div>
-          </div>
-          <div className="space-y-1">
-            <div className="font-display font-black text-2.5xl text-gold-400">$0 <span className="text-xs">FEES</span></div>
-            <div className="text-xs font-bold text-slate-400 uppercase tracking-widest">Monthly maintenance</div>
-          </div>
-          <div className="space-y-1">
-            <div className="font-display font-black text-2.5xl text-gold-400">100% <span className="text-xs">SAFE</span></div>
-            <div className="text-xs font-bold text-slate-400 uppercase tracking-widest">MFA protected portal</div>
-          </div>
         </div>
       </div>
     </section>

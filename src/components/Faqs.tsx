@@ -32,7 +32,7 @@ export default function Faqs() {
             Frequently Asked Questions
           </h2>
           <p className="text-slate-500 text-sm">
-            Everything you need to know about our high-yield operations, secure client procedures, and loan guidelines.
+            Simple answers about accounts, loans, safety, and online banking.
           </p>
         </div>
 

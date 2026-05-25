@@ -25,8 +25,8 @@ export default function App() {
   const [activeTab, setActiveTab] = useState<'home' | 'dashboard'>('home');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState('');
-  const [initialBalance, setInitialBalance] = useState<number | undefined>(undefined);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [isPasswordRecoveryMode, setIsPasswordRecoveryMode] = useState(false);
   const [currentSection, setCurrentSection] = useState('hero');
 
   // Load existing session if Supabase is active
@@ -39,26 +39,23 @@ export default function App() {
             const metadata = session.user.user_metadata;
             const name = metadata?.full_name || session.user.email?.split('@')[0];
             setUserName(name ? name.charAt(0).toUpperCase() + name.slice(1) : 'Customer');
-            if (metadata?.initial_balance !== undefined) {
-              setInitialBalance(parseFloat(metadata.initial_balance));
-            }
             setIsLoggedIn(true);
           }
         });
 
-        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+          if (event === 'PASSWORD_RECOVERY') {
+            setIsPasswordRecoveryMode(true);
+            setIsLoginModalOpen(true);
+          }
           if (session?.user) {
             const metadata = session.user.user_metadata;
             const name = metadata?.full_name || session.user.email?.split('@')[0];
             setUserName(name ? name.charAt(0).toUpperCase() + name.slice(1) : 'Customer');
-            if (metadata?.initial_balance !== undefined) {
-              setInitialBalance(parseFloat(metadata.initial_balance));
-            }
             setIsLoggedIn(true);
           } else {
             setIsLoggedIn(false);
             setUserName('');
-            setInitialBalance(undefined);
           }
         });
 
@@ -80,9 +77,6 @@ export default function App() {
 
   const handleLoginSuccess = (name: string, metadata?: any) => {
     setUserName(name);
-    if (metadata?.initial_balance !== undefined) {
-      setInitialBalance(parseFloat(metadata.initial_balance));
-    }
     setIsLoggedIn(true);
   };
 
@@ -95,13 +89,13 @@ export default function App() {
     }
     setIsLoggedIn(false);
     setUserName('');
-    setInitialBalance(undefined);
     setActiveTab('home');
   };
 
   return (
     <div className="relative min-h-screen bg-slate-50 flex flex-col justify-between overflow-x-hidden antialiased">
       {/* Sticky Top Header Navigation */}
+      {activeTab === 'home' && (
       <Navbar 
         onLoginClick={() => setIsLoginModalOpen(true)}
         onNavigateToSection={navigateToSection}
@@ -112,6 +106,7 @@ export default function App() {
         activeTab={activeTab}
         setActiveTab={setActiveTab}
       />
+      )}
 
       {/* Primary Display Sections */}
       <main className="flex-grow">
@@ -120,19 +115,15 @@ export default function App() {
             userName={userName}
             onLogout={handleLogout}
             setActiveTab={setActiveTab}
-            initialBalance={initialBalance}
           />
         ) : (
           <>
             {/* Immersive Welcome Banner Carousel & Login widget */}
             <Hero 
-              onLoginSuccess={handleLoginSuccess}
               onNavigateToSection={navigateToSection}
-              isLoggedIn={isLoggedIn}
               onOpenSelfLogin={() => {
                 setIsLoginModalOpen(true);
               }}
-              setActiveTab={setActiveTab}
             />
 
             {/* Core Value Deliverables (Checking & savings APY highlights) */}
@@ -165,18 +156,23 @@ export default function App() {
         )}
       </main>
 
-      {/* Shared Footer block containing legal NCUA structures */}
-      <Footer />
+      {activeTab === 'home' && <Footer />}
 
       {/* Floating security and assistance overlay buttons */}
       <LoginModal 
         isOpen={isLoginModalOpen}
-        onClose={() => setIsLoginModalOpen(false)}
+        onClose={() => {
+          setIsLoginModalOpen(false);
+          setIsPasswordRecoveryMode(false);
+        }}
         onLoginSuccess={handleLoginSuccess}
         setActiveTab={setActiveTab}
+        initialRecoveryMode={isPasswordRecoveryMode}
+        onRecoveryComplete={() => setIsPasswordRecoveryMode(false)}
       />
 
       {/* Back to top scroll button */}
+      {activeTab === 'home' && (
       <button
         onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
         className="fixed bottom-5 right-5 z-40 bg-slate-900 border border-slate-700/80 hover:bg-slate-800 text-gold-400 hover:text-white p-3 rounded-full shadow-2xl active:scale-95 transition-all cursor-pointer group"
@@ -185,6 +181,7 @@ export default function App() {
       >
         <ArrowUpCircle className="w-5 h-5 group-hover:scale-110 transition-transform" />
       </button>
+      )}
     </div>
   );
 }

@@ -171,25 +171,145 @@ export const FAQ_DATA: FaqItem[] = [
     id: 'fq1',
     category: 'Accounts',
     question: 'How do I transfer my direct deposit to Bank Bitachon?',
-    answer: 'We make it painless with our automated Direct Deposit Switch Assistant. Once logged into your secure digital banking portal, go to Services > Switch Deposit, upload your former employer pay stub or bank form, and our system generates and sends a pre-filled authorization to your payroll department automatically.'
+    answer: 'Sign in, go to Account Info, and choose direct deposit. We give you the routing number and account number to share with your job.'
   },
   {
     id: 'fq2',
     category: 'Security',
     question: 'What measures are in place to secure my Bank Bitachon account?',
-    answer: 'We employ multi-layered military-grade defenses. Every login session requires Multi-Factor Authentication (MFA) via hardware security keys or authenticator apps. Your data is protected in transit with TLS 1.3 and at rest with AES-256 encryption. We also monitor transactions 24/7 with proactive AI anomaly detection and offer instant card-lock features directly in the app.'
+    answer: 'We protect your account with secure sign in, alerts, and checks for strange activity. If something looks wrong, we help you stop it fast.'
   },
   {
     id: 'fq3',
     category: 'Loans',
     question: 'Does applying for a pre-approved auto or home loan hurt my credit score?',
-    answer: 'Not at all! Our pre-qualification system utilizes a "soft credit pull" which checks your eligibility and locks in your highly competitive rate without impacting your credit score. If you proceed with the formalized, final application, a standard credit inquiry is initiated.'
+    answer: 'Checking your rate does not hurt your credit. If you choose to finish the loan, we may need a full credit check.'
   },
   {
     id: 'fq4',
     category: 'Digital',
     question: 'What is an Interactive Teller Machine (ITM) and how do I use it?',
-    answer: 'ITMs are our high-definition smart terminals. They look like regular ATMs, but can connect you face-to-face via full-rate video stream to a live Bank Bitachon teller in our HQ office. This allows you to perform custom operations like making loan payments, cashing checks down to the penny, and transferring money between joint accounts from your car window.'
+    answer: 'An ITM is like an ATM with video help. You can talk to a real helper, deposit money, pay a loan, or move money.'
+  },
+  {
+    id: 'fq5',
+    category: 'Accounts',
+    question: 'How do I see my balance?',
+    answer: 'Sign in and look at the top card. It shows the money you can use now.'
+  },
+  {
+    id: 'fq6',
+    category: 'Accounts',
+    question: 'How do I find my account number?',
+    answer: 'Open Account Info. Your account number is shown with your account name and balance.'
+  },
+  {
+    id: 'fq7',
+    category: 'Accounts',
+    question: 'Can I hide my balance?',
+    answer: 'Yes. Tap the eye button on the balance card. Tap it again when you want to see the balance.'
+  },
+  {
+    id: 'fq8',
+    category: 'Accounts',
+    question: 'What does available balance mean?',
+    answer: 'It is the money you can use today. Some pending payments may not be counted yet.'
+  },
+  {
+    id: 'fq9',
+    category: 'Accounts',
+    question: 'How do I add money?',
+    answer: 'Open Deposit, choose an account, enter the amount, and tap Add money.'
+  },
+  {
+    id: 'fq10',
+    category: 'Loans',
+    question: 'How do I check a loan payment?',
+    answer: 'Open History and look for your loan payment. You can also check your loan account in Account Info.'
+  },
+  {
+    id: 'fq11',
+    category: 'Loans',
+    question: 'Can I pay my loan early?',
+    answer: 'Yes. You can make extra payments when your loan allows it. Check your loan page before you pay.'
+  },
+  {
+    id: 'fq12',
+    category: 'Loans',
+    question: 'What is APR?',
+    answer: 'APR is the yearly cost of borrowing money. A lower APR usually means you pay less.'
+  },
+  {
+    id: 'fq13',
+    category: 'Loans',
+    question: 'How do I start a car loan?',
+    answer: 'Go to the loan tool, enter the car amount, and review the payment estimate.'
+  },
+  {
+    id: 'fq14',
+    category: 'Loans',
+    question: 'Can I see my loan balance?',
+    answer: 'Yes. Open Account Info and choose your loan account. You will see what is still owed.'
+  },
+  {
+    id: 'fq15',
+    category: 'Security',
+    question: 'What should I do if I see a payment I did not make?',
+    answer: 'Open History, check the payment, and contact support right away. We can help review it.'
+  },
+  {
+    id: 'fq16',
+    category: 'Security',
+    question: 'How do I keep my account safe?',
+    answer: 'Use a strong password, do not share it, and sign out when you are done.'
+  },
+  {
+    id: 'fq17',
+    category: 'Security',
+    question: 'Why do I need email confirmation?',
+    answer: 'It helps us know the email belongs to you before we open full account access.'
+  },
+  {
+    id: 'fq18',
+    category: 'Security',
+    question: 'What if I forget my password?',
+    answer: 'Use Forgot password on the sign-in page. We will send a reset link to your email.'
+  },
+  {
+    id: 'fq19',
+    category: 'Security',
+    question: 'Does Bank Bitachon watch for fraud?',
+    answer: 'Yes. We check for strange account activity and can help stop unsafe payments.'
+  },
+  {
+    id: 'fq20',
+    category: 'Digital',
+    question: 'How do I send money?',
+    answer: 'Sign in, open Send Money, choose where money comes from, choose where it goes, and enter the amount.'
+  },
+  {
+    id: 'fq21',
+    category: 'Digital',
+    question: 'How do I see past payments?',
+    answer: 'Open History. You will see money in, money out, dates, and payment names.'
+  },
+  {
+    id: 'fq22',
+    category: 'Digital',
+    question: 'Can I use the dashboard on my phone?',
+    answer: 'Yes. The dashboard is made to work on phones, tablets, and computers.'
+  },
+  {
+    id: 'fq23',
+    category: 'Digital',
+    question: 'Why did my page not update?',
+    answer: 'Refresh the page. If it still looks wrong, sign out and sign in again.'
+  },
+  {
+    id: 'fq24',
+    category: 'Digital',
+    question: 'Can I download a statement?',
+    answer: 'Statements will be in Account Info. For now, use History to review your activity.'
   }
 ];
 
@@ -198,7 +318,7 @@ export const INITIAL_ACCOUNTS: Account[] = [
     id: 'ac1',
     name: 'Ultimate Yield checking',
     number: '•••• 8920',
-    balance: 5420.75,
+    balance: 350000.00,
     type: 'Checking'
   },
   {
@@ -230,58 +350,58 @@ export const INITIAL_ACCOUNTS: Account[] = [
 export const INITIAL_TRANSACTIONS: Transaction[] = [
   {
     id: 't_01',
-    date: 'May 22, 2026',
+    date: 'May 22, 2025',
     description: 'Direct Deposit: ARTISANAL BLOOM SALARY',
     category: 'Income',
-    amount: 3250.00,
+    amount: 20000.00,
     status: 'Completed'
   },
   {
     id: 't_02',
-    date: 'May 21, 2026',
+    date: 'May 21, 2025',
     description: 'Whole Foods Market Manhattan',
     category: 'Shopping',
-    amount: -124.50,
+    amount: -5000.00,
     status: 'Completed'
   },
   {
     id: 't_03',
-    date: 'May 19, 2026',
+    date: 'May 19, 2025',
     description: 'Transfer to High-Yield Savings',
     category: 'Transfer',
-    amount: -1000.00,
+    amount: -15000.00,
     status: 'Completed'
   },
   {
     id: 't_04',
-    date: 'May 18, 2026',
+    date: 'May 18, 2025',
     description: 'Consolidated Edison Power Bill',
     category: 'Utilities',
-    amount: -85.75,
+    amount: -5000.00,
     status: 'Completed'
   },
   {
     id: 't_05',
-    date: 'May 17, 2026',
+    date: 'May 17, 2025',
     description: 'Le Bernardin Dining NYC',
     category: 'Dining',
-    amount: -212.00,
+    amount: -15000.00,
     status: 'Completed'
   },
   {
     id: 't_06',
-    date: 'May 15, 2026',
+    date: 'May 15, 2025',
     description: 'Monthly Dividend Compound Credit Check',
     category: 'Income',
-    amount: 172.18,
+    amount: 300000.00,
     status: 'Completed'
   },
   {
     id: 't_07',
-    date: 'May 10, 2026',
+    date: 'May 10, 2025',
     description: 'Starbucks Coffee Lexington Ave',
     category: 'Dining',
-    amount: -12.45,
+    amount: -5000.00,
     status: 'Completed'
   }
 ];

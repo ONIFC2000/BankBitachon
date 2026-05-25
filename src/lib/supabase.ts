@@ -7,7 +7,9 @@ import { createClient } from '@supabase/supabase-js';
 
 // Retrieve values from environment variables securely
 const supabaseUrl = (import.meta as any).env?.VITE_SUPABASE_URL;
-const supabaseAnonKey = (import.meta as any).env?.VITE_SUPABASE_ANON_KEY;
+const supabaseAnonKey =
+  (import.meta as any).env?.VITE_SUPABASE_PUBLISHABLE_KEY ||
+  (import.meta as any).env?.VITE_SUPABASE_ANON_KEY;
 
 // Check if credentials exist for live cloud database
 export const isSupabaseConfigured = !!(supabaseUrl && supabaseAnonKey);
@@ -20,7 +22,13 @@ export function getSupabaseClient() {
     return null;
   }
   if (!supabaseClientInstance) {
-    supabaseClientInstance = createClient(supabaseUrl, supabaseAnonKey);
+    supabaseClientInstance = createClient(supabaseUrl, supabaseAnonKey, {
+      auth: {
+        autoRefreshToken: true,
+        detectSessionInUrl: true,
+        persistSession: true,
+      },
+    });
   }
   return supabaseClientInstance;
 }
@@ -37,17 +45,24 @@ export const sandboxAuthStore = {
       return [];
     }
   },
-  addUser: (username: string, fullName: string, initialBalance: number) => {
+  addUser: (username: string, fullName: string, initialBalance: number, password: string) => {
     try {
       const users = sandboxAuthStore.getUsers();
+      const normalizedUsername = username.trim().toLowerCase();
+      const existingIndex = users.findIndex((u: any) => u.username === normalizedUsername);
       const newUser = {
-        id: 'user_' + Math.random().toString(36).substring(2, 11),
-        username: username.toLowerCase(),
+        id: users[existingIndex]?.id || 'user_' + Math.random().toString(36).substring(2, 11),
+        username: normalizedUsername,
         fullName,
+        password,
         balance: initialBalance || 5000,
-        createdAt: new Date().toISOString()
+        createdAt: users[existingIndex]?.createdAt || new Date().toISOString()
       };
-      users.push(newUser);
+      if (existingIndex >= 0) {
+        users[existingIndex] = newUser;
+      } else {
+        users.push(newUser);
+      }
       localStorage.setItem('bitachon_sandbox_users', JSON.stringify(users));
       return newUser;
     } catch (e) {
@@ -57,6 +72,15 @@ export const sandboxAuthStore = {
   },
   findUserByUsername: (username: string) => {
     const users = sandboxAuthStore.getUsers();
-    return users.find((u: any) => u.username === username.toLowerCase());
+    return users.find((u: any) => u.username === username.trim().toLowerCase());
+  },
+  updatePassword: (username: string, password: string) => {
+    const users = sandboxAuthStore.getUsers();
+    const normalizedUsername = username.trim().toLowerCase();
+    const userIndex = users.findIndex((u: any) => u.username === normalizedUsername);
+    if (userIndex < 0) return false;
+    users[userIndex] = { ...users[userIndex], password };
+    localStorage.setItem('bitachon_sandbox_users', JSON.stringify(users));
+    return true;
   }
 };

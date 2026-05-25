@@ -10,7 +10,8 @@ import {
   Menu, 
   X, 
   Lock, 
-  PhoneCall
+  PhoneCall,
+  UserCircle
 } from 'lucide-react';
 
 interface NavbarProps {
@@ -45,6 +46,7 @@ export default function Navbar({
   return (
     <header className="sticky top-0 z-50 w-full bg-slate-900 border-b border-gold-600/30 text-white shadow-xl">
       {/* Top Action Utility Bar */}
+      {activeTab !== 'dashboard' && (
       <div className="hidden md:flex w-full bg-slate-950 border-b border-slate-800 text-xs px-6 py-2.5 justify-between items-center text-slate-300 font-sans">
         <div className="flex items-center space-x-6">
           <span className="flex items-center gap-1.5 text-gold-400">
@@ -75,6 +77,7 @@ export default function Navbar({
           </button>
         </div>
       </div>
+      )}
 
       {/* Main Bar */}
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-3.5 flex justify-between items-center">
@@ -136,9 +139,11 @@ export default function Navbar({
               </div>
               <button 
                 onClick={() => setActiveTab('dashboard')}
-                className="px-2.5 py-1 text-xs font-semibold uppercase bg-primary-750 text-white hover:bg-primary-600 rounded transition-colors"
+                className="inline-flex min-h-9 min-w-9 items-center justify-center rounded-full bg-primary-750 text-white transition-colors hover:bg-primary-600"
+                aria-label="Open profile portal"
+                title="Profile portal"
               >
-                My Portal
+                <UserCircle className="h-5 w-5" />
               </button>
               <button 
                 onClick={onLogout}
@@ -160,14 +165,6 @@ export default function Navbar({
 
         {/* Mobile Navigation controls */}
         <div className="flex lg:hidden items-center space-x-2">
-          {isLoggedIn && (
-            <button
-              onClick={() => setActiveTab('dashboard')}
-              className="min-h-11 px-3 py-2 text-xs font-bold uppercase bg-gold-500 text-slate-950 rounded-xl shadow"
-            >
-              Portal
-            </button>
-          )}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             className="min-h-11 min-w-11 p-2 text-slate-300 hover:text-white hover:bg-slate-800 rounded-xl transition-colors cursor-pointer"
