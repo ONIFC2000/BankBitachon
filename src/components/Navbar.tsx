@@ -234,7 +234,7 @@ export default function Navbar({
                       }}
                       className="w-full min-h-12 bg-primary-700 hover:bg-primary-650 text-white font-bold text-sm uppercase py-3 rounded-xl text-center"
                     >
-                      Access Account Dashboard
+                      Dashboard
                     </button>
                     <button
                       onClick={() => {

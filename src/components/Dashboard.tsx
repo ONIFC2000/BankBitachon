@@ -17,6 +17,7 @@ import {
   Building2,
   CheckCircle,
   CircleHelp,
+  Copy,
   CreditCard,
   Download,
   Eye,
@@ -47,7 +48,18 @@ type DashboardPage =
   | 'account'
   | 'transfer'
   | 'local-transfer'
+  | 'wire-methods'
   | 'wire'
+  | 'crypto-transfer'
+  | 'paypal-transfer'
+  | 'wise-transfer'
+  | 'cash-app-transfer'
+  | 'skrill-transfer'
+  | 'venmo-transfer'
+  | 'zelle-transfer'
+  | 'revolut-transfer'
+  | 'alipay-transfer'
+  | 'wechat-transfer'
   | 'receive'
   | 'deposit'
   | 'request-money'
@@ -76,9 +88,53 @@ const pageTitles: Record<DashboardPage, { title: string; helper: string }> = {
     title: 'Local Transfer',
     helper: 'Send money to a local account.',
   },
+  'wire-methods': {
+    title: 'Select Transfer Method',
+    helper: 'Choose how you want to send money out.',
+  },
   wire: {
-    title: 'International Wire',
-    helper: 'Send money to another country.',
+    title: 'Wire Transfer',
+    helper: 'Send money to an international bank account.',
+  },
+  'crypto-transfer': {
+    title: 'Cryptocurrency',
+    helper: 'Send funds to your cryptocurrency wallet.',
+  },
+  'paypal-transfer': {
+    title: 'PayPal',
+    helper: 'Transfer funds to your PayPal account.',
+  },
+  'wise-transfer': {
+    title: 'Wise Transfer',
+    helper: 'Transfer with lower fees using Wise.',
+  },
+  'cash-app-transfer': {
+    title: 'Cash App',
+    helper: 'Quick transfers to your Cash App account.',
+  },
+  'skrill-transfer': {
+    title: 'Skrill',
+    helper: 'Transfer funds to your Skrill account.',
+  },
+  'venmo-transfer': {
+    title: 'Venmo',
+    helper: 'Send funds to your Venmo account.',
+  },
+  'zelle-transfer': {
+    title: 'Zelle',
+    helper: 'Quick transfers to your Zelle account.',
+  },
+  'revolut-transfer': {
+    title: 'Revolut',
+    helper: 'Transfer to your Revolut account with low fees.',
+  },
+  'alipay-transfer': {
+    title: 'Alipay',
+    helper: 'Send funds to your Alipay account.',
+  },
+  'wechat-transfer': {
+    title: 'WeChat Pay',
+    helper: 'Transfer to your WeChat Pay wallet.',
   },
   deposit: {
     title: 'Deposit Money',
@@ -135,7 +191,7 @@ const appMenuSections = [
     label: 'Transfers',
     items: [
       { id: 'local-transfer' as DashboardPage, label: 'Local Transfer', icon: Send },
-      { id: 'wire' as DashboardPage, label: 'International Wire', icon: Globe2 },
+      { id: 'wire-methods' as DashboardPage, label: 'Transfer Methods', icon: Globe2 },
       { id: 'receive' as DashboardPage, label: 'Receive Money', icon: Download },
     ],
   },
@@ -177,7 +233,282 @@ const cardChoices = [
   },
 ];
 
-const moneyPages: DashboardPage[] = ['local-transfer', 'deposit', 'wire', 'request-money'];
+const mainTransferMethods = [
+  {
+    id: 'wire' as DashboardPage,
+    title: 'Wire Transfer',
+    helper: 'Transfer funds directly to international bank accounts.',
+    icon: Globe2,
+  },
+  {
+    id: 'crypto-transfer' as DashboardPage,
+    title: 'Cryptocurrency',
+    helper: 'Send funds to your cryptocurrency wallet.',
+    icon: Wallet,
+  },
+  {
+    id: 'paypal-transfer' as DashboardPage,
+    title: 'PayPal',
+    helper: 'Transfer funds to your PayPal account.',
+    icon: BadgeDollarSign,
+  },
+  {
+    id: 'wise-transfer' as DashboardPage,
+    title: 'Wise Transfer',
+    helper: 'Transfer with lower fees using Wise.',
+    icon: Send,
+  },
+  {
+    id: 'cash-app-transfer' as DashboardPage,
+    title: 'Cash App',
+    helper: 'Quick transfers to your Cash App account.',
+    icon: Plus,
+  },
+];
+
+const moreTransferMethods = [
+  {
+    id: 'skrill-transfer' as DashboardPage,
+    title: 'Skrill',
+    helper: 'Transfer funds to your Skrill account.',
+    icon: Wallet,
+  },
+  {
+    id: 'venmo-transfer' as DashboardPage,
+    title: 'Venmo',
+    helper: 'Send funds to your Venmo account.',
+    icon: Send,
+  },
+  {
+    id: 'zelle-transfer' as DashboardPage,
+    title: 'Zelle',
+    helper: 'Quick transfers to your Zelle account.',
+    icon: ArrowRight,
+  },
+  {
+    id: 'revolut-transfer' as DashboardPage,
+    title: 'Revolut',
+    helper: 'Transfer to your Revolut account with low fees.',
+    icon: CreditCard,
+  },
+  {
+    id: 'alipay-transfer' as DashboardPage,
+    title: 'Alipay',
+    helper: 'Send funds to your Alipay account.',
+    icon: ReceiptText,
+  },
+  {
+    id: 'wechat-transfer' as DashboardPage,
+    title: 'WeChat Pay',
+    helper: 'Transfer to your WeChat Pay wallet.',
+    icon: Wallet,
+  },
+];
+
+const transferMethodPages = [...mainTransferMethods, ...moreTransferMethods]
+  .filter((method) => method.id !== 'wire')
+  .map((method) => method.id);
+
+const wireCountries = [
+  'Afghanistan',
+  'Albania',
+  'Algeria',
+  'Andorra',
+  'Angola',
+  'Antigua and Barbuda',
+  'Argentina',
+  'Armenia',
+  'Australia',
+  'Austria',
+  'Azerbaijan',
+  'Bahamas',
+  'Bahrain',
+  'Bangladesh',
+  'Barbados',
+  'Belarus',
+  'Belgium',
+  'Belize',
+  'Benin',
+  'Bhutan',
+  'Bolivia',
+  'Bosnia and Herzegovina',
+  'Botswana',
+  'Brazil',
+  'Brunei',
+  'Bulgaria',
+  'Burkina Faso',
+  'Burundi',
+  'Cabo Verde',
+  'Cambodia',
+  'Cameroon',
+  'Canada',
+  'Central African Republic',
+  'Chad',
+  'Chile',
+  'China',
+  'Colombia',
+  'Comoros',
+  'Congo',
+  'Costa Rica',
+  "Cote d'Ivoire",
+  'Croatia',
+  'Cuba',
+  'Cyprus',
+  'Czechia',
+  'Democratic Republic of the Congo',
+  'Denmark',
+  'Djibouti',
+  'Dominica',
+  'Dominican Republic',
+  'Ecuador',
+  'Egypt',
+  'El Salvador',
+  'Equatorial Guinea',
+  'Eritrea',
+  'Estonia',
+  'Eswatini',
+  'Ethiopia',
+  'Fiji',
+  'Finland',
+  'France',
+  'Gabon',
+  'Gambia',
+  'Georgia',
+  'Germany',
+  'Ghana',
+  'Greece',
+  'Grenada',
+  'Guatemala',
+  'Guinea',
+  'Guinea-Bissau',
+  'Guyana',
+  'Haiti',
+  'Honduras',
+  'Hungary',
+  'Iceland',
+  'India',
+  'Indonesia',
+  'Iran',
+  'Iraq',
+  'Ireland',
+  'Israel',
+  'Italy',
+  'Jamaica',
+  'Japan',
+  'Jordan',
+  'Kazakhstan',
+  'Kenya',
+  'Kiribati',
+  'Kuwait',
+  'Kyrgyzstan',
+  'Laos',
+  'Latvia',
+  'Lebanon',
+  'Lesotho',
+  'Liberia',
+  'Libya',
+  'Liechtenstein',
+  'Lithuania',
+  'Luxembourg',
+  'Madagascar',
+  'Malawi',
+  'Malaysia',
+  'Maldives',
+  'Mali',
+  'Malta',
+  'Marshall Islands',
+  'Mauritania',
+  'Mauritius',
+  'Mexico',
+  'Micronesia',
+  'Moldova',
+  'Monaco',
+  'Mongolia',
+  'Montenegro',
+  'Morocco',
+  'Mozambique',
+  'Myanmar',
+  'Namibia',
+  'Nauru',
+  'Nepal',
+  'Netherlands',
+  'New Zealand',
+  'Nicaragua',
+  'Niger',
+  'Nigeria',
+  'North Korea',
+  'North Macedonia',
+  'Norway',
+  'Oman',
+  'Pakistan',
+  'Palau',
+  'Palestine',
+  'Panama',
+  'Papua New Guinea',
+  'Paraguay',
+  'Peru',
+  'Philippines',
+  'Poland',
+  'Portugal',
+  'Qatar',
+  'Romania',
+  'Russia',
+  'Rwanda',
+  'Saint Kitts and Nevis',
+  'Saint Lucia',
+  'Saint Vincent and the Grenadines',
+  'Samoa',
+  'San Marino',
+  'Sao Tome and Principe',
+  'Saudi Arabia',
+  'Senegal',
+  'Serbia',
+  'Seychelles',
+  'Sierra Leone',
+  'Singapore',
+  'Slovakia',
+  'Slovenia',
+  'Solomon Islands',
+  'Somalia',
+  'South Africa',
+  'South Korea',
+  'South Sudan',
+  'Spain',
+  'Sri Lanka',
+  'Sudan',
+  'Suriname',
+  'Sweden',
+  'Switzerland',
+  'Syria',
+  'Taiwan',
+  'Tajikistan',
+  'Tanzania',
+  'Thailand',
+  'Timor-Leste',
+  'Togo',
+  'Tonga',
+  'Trinidad and Tobago',
+  'Tunisia',
+  'Turkey',
+  'Turkmenistan',
+  'Tuvalu',
+  'Uganda',
+  'Ukraine',
+  'United Arab Emirates',
+  'United Kingdom',
+  'United States',
+  'Uruguay',
+  'Uzbekistan',
+  'Vanuatu',
+  'Vatican City',
+  'Venezuela',
+  'Vietnam',
+  'Yemen',
+  'Zambia',
+  'Zimbabwe',
+];
+
+const moneyPages: DashboardPage[] = ['local-transfer', 'deposit', 'wire', 'request-money', ...transferMethodPages];
 
 export default function Dashboard({ userName, onLogout, setActiveTab }: DashboardProps) {
   const [accounts, setAccounts] = useState<Account[]>(INITIAL_ACCOUNTS);
@@ -196,6 +527,8 @@ export default function Dashboard({ userName, onLogout, setActiveTab }: Dashboar
   const [transferPin, setTransferPin] = useState('');
   const [pinInput, setPinInput] = useState('');
   const [newPin, setNewPin] = useState('');
+  const [isPinGateOpen, setIsPinGateOpen] = useState(false);
+  const [pendingTransferAction, setPendingTransferAction] = useState<'send' | 'deposit' | null>(null);
 
   useEffect(() => {
     const timer = window.setInterval(() => setNow(new Date()), 1000);
@@ -235,6 +568,7 @@ export default function Dashboard({ userName, onLogout, setActiveTab }: Dashboar
     new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value);
 
   const isMoneyPage = moneyPages.includes(page);
+  const isPopupPage = isMoneyPage || page === 'account';
 
   const showMessage = (text: string) => {
     setMessage(text);
@@ -283,9 +617,7 @@ export default function Dashboard({ userName, onLogout, setActiveTab }: Dashboar
     ]);
   };
 
-  const handleSendMoney = (event: React.FormEvent) => {
-    event.preventDefault();
-    if (!checkTransferPin()) return;
+  const runSendMoney = () => {
     const amount = Number(sendAmount);
     const fromAccount = accounts.find((account) => account.id === fromAccountId);
     const toAccount = accounts.find((account) => account.id === toAccountId);
@@ -326,9 +658,7 @@ export default function Dashboard({ userName, onLogout, setActiveTab }: Dashboar
     }, 700);
   };
 
-  const handleDeposit = (event: React.FormEvent) => {
-    event.preventDefault();
-    if (!checkTransferPin()) return;
+  const runDeposit = () => {
     const amount = Number(depositAmount);
     const account = accounts.find((item) => item.id === depositAccountId);
 
@@ -355,6 +685,30 @@ export default function Dashboard({ userName, onLogout, setActiveTab }: Dashboar
       setIsWorking(false);
       showMessage(`Done. You added ${formatMoney(amount)}.`);
     }, 700);
+  };
+
+  const handleSendMoney = (event: React.FormEvent) => {
+    event.preventDefault();
+    setPendingTransferAction('send');
+    setIsPinGateOpen(true);
+  };
+
+  const handleDeposit = (event: React.FormEvent) => {
+    event.preventDefault();
+    setPendingTransferAction('deposit');
+    setIsPinGateOpen(true);
+  };
+
+  const confirmTransferPin = () => {
+    if (!checkTransferPin()) return;
+    setIsPinGateOpen(false);
+    if (pendingTransferAction === 'send') {
+      runSendMoney();
+    }
+    if (pendingTransferAction === 'deposit') {
+      runDeposit();
+    }
+    setPendingTransferAction(null);
   };
 
   const actions = [
@@ -393,7 +747,7 @@ export default function Dashboard({ userName, onLogout, setActiveTab }: Dashboar
   ];
 
   return (
-    <div className="min-h-screen bg-slate-950 bg-grid-pattern py-6 text-white sm:py-8">
+    <div className="min-h-screen bg-slate-950 bg-grid-pattern pb-24 pt-6 text-white sm:py-8">
       <div className="mx-auto flex max-w-7xl gap-6 px-4 sm:px-6 lg:px-8">
         <AppSidebar page={page} openPage={openPage} onHome={() => setActiveTab('home')} onLogout={onLogout} />
         <div className="min-w-0 flex-1">
@@ -426,7 +780,21 @@ export default function Dashboard({ userName, onLogout, setActiveTab }: Dashboar
           userName={userName}
         />
 
-        {!isMoneyPage && (
+        <TransferPinGate
+          isOpen={isPinGateOpen}
+          transferPin={transferPin}
+          pinInput={pinInput}
+          setPinInput={setPinInput}
+          newPin={newPin}
+          setNewPin={setNewPin}
+          onCancel={() => {
+            setIsPinGateOpen(false);
+            setPendingTransferAction(null);
+          }}
+          onConfirm={confirmTransferPin}
+        />
+
+        {page === 'home' && (
         <section className="relative overflow-hidden rounded-[1.75rem] border border-slate-800 bg-gradient-to-br from-slate-900 via-primary-950 to-slate-950 p-6 text-white shadow-2xl shadow-black/30 sm:p-8">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_62%_66%,rgba(241,207,76,0.13),transparent_28%)]" />
           <div className="absolute inset-0 bg-grid-pattern opacity-40" />
@@ -504,10 +872,10 @@ export default function Dashboard({ userName, onLogout, setActiveTab }: Dashboar
         )}
 
         <section className={`mt-6 rounded-[1.5rem] border border-slate-800 bg-slate-900/80 p-5 shadow-sm shadow-black/20 sm:p-7 ${
-          isMoneyPage ? 'lg:fixed lg:inset-0 lg:z-40 lg:m-0 lg:flex lg:items-center lg:justify-center lg:border-0 lg:bg-slate-950/75 lg:p-8 lg:backdrop-blur-md' : ''
+          isPopupPage ? 'lg:fixed lg:inset-0 lg:z-40 lg:m-0 lg:flex lg:items-center lg:justify-center lg:border-0 lg:bg-slate-950/75 lg:p-8 lg:backdrop-blur-md' : ''
         }`}>
-          <div className={isMoneyPage ? 'w-full max-w-2xl rounded-[1.5rem] border border-slate-800 bg-slate-900 p-5 shadow-2xl shadow-black/40 sm:p-7' : ''}>
-          {page !== 'home' && (
+          <div className={isPopupPage ? 'max-h-[calc(100vh-2rem)] w-full max-w-2xl overflow-y-auto rounded-[1.5rem] border border-slate-800 bg-slate-900 p-5 shadow-2xl shadow-black/40 sm:p-7' : ''}>
+          {page !== 'home' && page !== 'account' && (
             <div className="mb-5 flex items-center justify-between gap-3">
               <button
                 onClick={() => openPage('home')}
@@ -519,12 +887,14 @@ export default function Dashboard({ userName, onLogout, setActiveTab }: Dashboar
             </div>
           )}
 
+          {page !== 'account' && (
           <div className="mb-6">
             <h2 className="text-2xl font-black tracking-tight text-white">
               {pageTitles[page].title}
             </h2>
             <p className="mt-2 text-base text-slate-300">{pageTitles[page].helper}</p>
           </div>
+          )}
 
           {page === 'home' && (
             <>
@@ -548,17 +918,16 @@ export default function Dashboard({ userName, onLogout, setActiveTab }: Dashboar
             </div>
             <div className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-[1fr_0.85fr]">
               <VirtualCardPromo onApply={() => openPage('cards')} />
-              <RecentHistory transactions={transactions.slice(0, 5)} formatMoney={formatMoney} onViewAll={() => openPage('history')} />
+              <RecentHistory transactions={transactions.slice(0, 2)} formatMoney={formatMoney} onViewAll={() => openPage('history')} />
             </div>
-            {!transferPin && (
-              <TransferPinPrompt newPin={newPin} setNewPin={setNewPin} onSave={() => checkTransferPin()} />
-            )}
             </>
           )}
 
-          {page === 'account' && <AccountInfo accounts={accounts} formatMoney={formatMoney} />}
+          {page === 'account' && <AccountInfo accounts={accounts} formatMoney={formatMoney} userName={userName} onClose={() => openPage('home')} />}
 
           {page === 'transfer' && <TransferChoicePage openPage={openPage} />}
+
+          {page === 'wire-methods' && <TransferMethodPage openPage={openPage} />}
 
           {page === 'receive' && <ReceiveChoicePage openPage={openPage} />}
 
@@ -622,6 +991,25 @@ export default function Dashboard({ userName, onLogout, setActiveTab }: Dashboar
             />
           )}
 
+          {transferMethodPages.includes(page) && (
+            <ExternalTransferForm
+              method={pageTitles[page]}
+              accounts={accounts}
+              fromAccountId={fromAccountId}
+              setFromAccountId={setFromAccountId}
+              amount={sendAmount}
+              setAmount={setSendAmount}
+              transferPin={transferPin}
+              pinInput={pinInput}
+              setPinInput={setPinInput}
+              newPin={newPin}
+              setNewPin={setNewPin}
+              isWorking={isWorking}
+              formatMoney={formatMoney}
+              onSubmit={handleSendMoney}
+            />
+          )}
+
           {page === 'request-money' && <SimpleServicePage title="Request money" buttonLabel="Send request" fields={['Who should pay?', 'Amount', 'Note']} />}
 
           {page === 'loan-request' && <SimpleServicePage title="Loan request" buttonLabel="Send request" fields={['Loan type', 'Amount needed', 'Reason']} />}
@@ -635,6 +1023,7 @@ export default function Dashboard({ userName, onLogout, setActiveTab }: Dashboar
           {page === 'support' && <SimpleServicePage title="Support ticket" buttonLabel="Send ticket" fields={['What happened?', 'Best contact email', 'Message']} />}
           </div>
         </section>
+        <MobileBottomNav page={page} openPage={openPage} />
         </div>
       </div>
     </div>
@@ -700,7 +1089,7 @@ function MobileAppMenu({
     { id: 'history' as DashboardPage, label: 'Activity', icon: ReceiptText, tone: 'bg-emerald-500/85 border-emerald-300/30 text-slate-950' },
     { id: 'cards' as DashboardPage, label: 'Cards', icon: CreditCard, tone: 'bg-primary-500/90 border-primary-300/30 text-white' },
     { id: 'transfer' as DashboardPage, label: 'Transfer', icon: Send, tone: 'bg-emerald-500/85 border-emerald-300/30 text-slate-950' },
-    { id: 'wire' as DashboardPage, label: "Int'l Wire", icon: Globe2, tone: 'bg-emerald-500/85 border-emerald-300/30 text-slate-950' },
+    { id: 'wire-methods' as DashboardPage, label: 'Methods', icon: Globe2, tone: 'bg-emerald-500/85 border-emerald-300/30 text-slate-950' },
     { id: 'receive' as DashboardPage, label: 'Receive', icon: Download, tone: 'bg-primary-500/90 border-primary-300/30 text-white' },
     { id: 'loan-request' as DashboardPage, label: 'Loan', icon: BadgeDollarSign, tone: 'bg-emerald-500/85 border-emerald-300/30 text-slate-950' },
     { id: 'tax-refund' as DashboardPage, label: 'IRS Refund', icon: FileText, tone: 'bg-primary-500/90 border-primary-300/30 text-white' },
@@ -770,6 +1159,45 @@ function MobileAppMenu({
   );
 }
 
+function MobileBottomNav({
+  page,
+  openPage,
+}: {
+  page: DashboardPage;
+  openPage: (page: DashboardPage) => void;
+}) {
+  const bottomItems = [
+    { id: 'home' as DashboardPage, label: 'Home', icon: Home },
+    { id: 'transfer' as DashboardPage, label: 'Send', icon: Send },
+    { id: 'cards' as DashboardPage, label: 'Cards', icon: CreditCard },
+    { id: 'history' as DashboardPage, label: 'History', icon: ReceiptText },
+  ];
+
+  return (
+    <nav className="fixed inset-x-3 bottom-3 z-40 rounded-2xl border border-slate-700 bg-slate-950/95 p-2 shadow-2xl shadow-black/50 backdrop-blur lg:hidden">
+      <div className="grid grid-cols-4 gap-1">
+        {bottomItems.map((item) => {
+          const Icon = item.icon;
+          const isActive =
+            item.id === page || (item.id === 'transfer' && ['wire-methods', 'wire', ...transferMethodPages].includes(page));
+          return (
+            <button
+              key={item.id}
+              onClick={() => openPage(item.id)}
+              className={`flex min-h-14 flex-col items-center justify-center rounded-xl text-xs font-black transition-colors ${
+                isActive ? 'bg-gold-400 text-slate-950' : 'text-slate-300 hover:bg-slate-900 hover:text-white'
+              }`}
+            >
+              <Icon className="mb-1 h-5 w-5" />
+              {item.label}
+            </button>
+          );
+        })}
+      </div>
+    </nav>
+  );
+}
+
 function AppMenuList({
   page,
   openPage,
@@ -818,7 +1246,7 @@ function RecentHistory({
   onViewAll: () => void;
 }) {
   return (
-    <div className="rounded-2xl border border-slate-800 bg-slate-950 p-4">
+    <div className="rounded-2xl border border-primary-700/50 bg-primary-950/35 p-4 shadow-lg shadow-black/20">
       <div className="mb-4 flex items-center justify-between gap-4">
         <div>
           <h3 className="text-lg font-black text-white">Recent history</h3>
@@ -828,7 +1256,7 @@ function RecentHistory({
           View all
         </button>
       </div>
-      <HistoryList transactions={transactions} formatMoney={formatMoney} compact />
+      <HistoryList transactions={transactions} formatMoney={formatMoney} compact variant="soft" />
     </div>
   );
 }
@@ -892,14 +1320,71 @@ function TransferChoicePage({ openPage }: { openPage: (page: DashboardPage) => v
       />
       <ChoiceCard
         icon={Globe2}
-        title="International wire"
-        helper="Send money to a bank in another country."
-        buttonLabel="Start wire"
-        onClick={() => openPage('wire')}
+        title="International and apps"
+        helper="Pick wire, PayPal, Wise, Cash App, crypto, and more."
+        buttonLabel="See methods"
+        onClick={() => openPage('wire-methods')}
       />
     </div>
   );
 }
+
+function TransferMethodPage({ openPage }: { openPage: (page: DashboardPage) => void }) {
+  return (
+    <div className="space-y-5">
+      <div>
+        <h3 className="text-xl font-black text-white">Select Transfer Method</h3>
+        <p className="mt-1 text-sm leading-6 text-slate-400">Choose where you want the money to go.</p>
+      </div>
+      <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+        {mainTransferMethods.map((method) => (
+          <TransferMethodCard key={method.id} method={method} onClick={() => openPage(method.id)} />
+        ))}
+      </div>
+      <div className="rounded-2xl border border-gold-400/25 bg-gold-400/10 p-4">
+        <p className="text-sm font-black text-gold-200">More Options</p>
+        <p className="mt-1 text-sm leading-6 text-slate-300">Zelle, Venmo, Revolut, and more.</p>
+      </div>
+      <div>
+        <h3 className="text-xl font-black text-white">Additional Transfer Methods</h3>
+        <div className="mt-3 grid grid-cols-1 gap-3 md:grid-cols-2">
+          {moreTransferMethods.map((method) => (
+            <TransferMethodCard key={method.id} method={method} onClick={() => openPage(method.id)} />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+type TransferMethodCardProps = {
+  key?: React.Key;
+  method: {
+    id: DashboardPage;
+    title: string;
+    helper: string;
+    icon: React.ElementType;
+  };
+  onClick: () => void;
+};
+
+const TransferMethodCard = ({ method, onClick }: TransferMethodCardProps) => {
+  const Icon = method.icon;
+  return (
+    <button
+      onClick={onClick}
+      className="group flex min-h-28 items-start gap-4 rounded-2xl border border-slate-800 bg-slate-950 p-4 text-left transition-colors hover:border-gold-400/60 hover:bg-slate-900"
+    >
+      <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary-500/15 text-primary-200 ring-1 ring-primary-400/20 group-hover:bg-gold-400 group-hover:text-slate-950">
+        <Icon className="h-6 w-6" />
+      </span>
+      <span>
+        <span className="block text-base font-black text-white">{method.title}</span>
+        <span className="mt-1 block text-sm leading-6 text-slate-400">{method.helper}</span>
+      </span>
+    </button>
+  );
+};
 
 function ReceiveChoicePage({ openPage }: { openPage: (page: DashboardPage) => void }) {
   return (
@@ -953,6 +1438,99 @@ function ChoiceCard({
 }
 
 function AccountInfo({
+  accounts,
+  formatMoney,
+  userName,
+  onClose,
+}: {
+  accounts: Account[];
+  formatMoney: (value: number) => string;
+  userName: string;
+  onClose: () => void;
+}) {
+  const primaryAccount = accounts[0];
+  const rows = [
+    { label: 'Account name', value: userName || 'Customer' },
+    { label: 'Account number', value: primaryAccount?.number || '72966750489' },
+    { label: 'Sort code', value: '388130' },
+    { label: 'Payment reference', value: '1234567890' },
+  ];
+
+  const copyValue = (value: string) => {
+    navigator.clipboard?.writeText(value).catch(() => undefined);
+  };
+
+  return (
+    <div className="mx-auto max-w-xl">
+      <div className="flex items-start justify-between gap-4">
+        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary-400/20 text-primary-200">
+          <Building2 className="h-8 w-8" />
+        </div>
+        <button onClick={onClose} className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-800 text-slate-200">
+          <X className="h-5 w-5" />
+        </button>
+      </div>
+
+      <div className="mt-4 text-center">
+        <h2 className="text-2xl font-black text-white">Bank Account Details</h2>
+        <p className="mt-2 text-sm leading-6 text-slate-300">
+          BankBitachon
+          <br />
+          Secure online account
+        </p>
+      </div>
+
+      <div className="mt-6 rounded-2xl border border-slate-800 bg-slate-950/70 p-4">
+        <div className="mb-4 flex items-center gap-2">
+          <CircleHelp className="h-5 w-5 text-primary-300" />
+          <h3 className="text-lg font-black text-white">Account Details</h3>
+        </div>
+        <div className="space-y-3">
+          {rows.map((row) => (
+            <div key={row.label} className="flex items-center justify-between gap-4 rounded-xl bg-slate-900/80 p-3">
+              <div className="flex min-w-0 items-center gap-3">
+                <span className="h-2.5 w-2.5 rounded-full bg-primary-400" />
+                <span className="text-sm font-bold text-slate-300">{row.label}</span>
+              </div>
+              <button
+                onClick={() => copyValue(row.value)}
+                className="flex min-w-0 items-center gap-2 text-right text-sm font-black text-white"
+                aria-label={`Copy ${row.label}`}
+              >
+                <span className="truncate">{row.value}</span>
+                <Copy className="h-4 w-4 shrink-0 text-primary-300" />
+              </button>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="mt-4 rounded-2xl border border-primary-400/30 bg-primary-400/15 p-4 text-sm leading-6 text-primary-100">
+        Use the payment reference when someone sends money to this account.
+      </div>
+
+      <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
+        {accounts.slice(0, 2).map((account) => (
+          <div key={account.id} className="rounded-2xl border border-slate-800 bg-slate-950/60 p-4">
+            <p className="text-xs font-black uppercase tracking-widest text-slate-500">{account.type}</p>
+            <p className="mt-2 text-base font-black text-white">{account.name}</p>
+            <p className="mt-3 text-sm text-slate-400">Balance</p>
+            <p className="font-black text-gold-300">{formatMoney(account.balance)}</p>
+          </div>
+        ))}
+      </div>
+
+      <button
+        onClick={onClose}
+        className="mt-6 min-h-12 w-full rounded-xl border border-slate-700 px-5 text-sm font-black text-slate-200 hover:border-gold-400/60"
+      >
+        Close
+      </button>
+    </div>
+  );
+}
+
+function LegacyAccountInfo({
   accounts,
   formatMoney,
 }: {
@@ -1047,7 +1625,6 @@ function MoneyForm({
       <Field label="Amount">
         <MoneyInput value={amount} onChange={setAmount} />
       </Field>
-      <TransferPinField transferPin={transferPin} pinInput={pinInput} setPinInput={setPinInput} newPin={newPin} setNewPin={setNewPin} />
       <div className="flex items-end">
         <SubmitButton isWorking={isWorking} label="Send money" workingLabel="Sending..." icon={Send} />
       </div>
@@ -1092,7 +1669,6 @@ function DepositForm({
       <Field label="Amount">
         <MoneyInput value={amount} onChange={setAmount} />
       </Field>
-      <TransferPinField transferPin={transferPin} pinInput={pinInput} setPinInput={setPinInput} newPin={newPin} setNewPin={setNewPin} />
       <div className="lg:col-span-2">
         <SubmitButton isWorking={isWorking} label="Add money" workingLabel="Adding..." icon={Plus} />
       </div>
@@ -1135,7 +1711,7 @@ function WireForm({
         <AccountSelect value={fromAccountId} onChange={setFromAccountId} accounts={accounts} formatMoney={formatMoney} />
       </Field>
       <Field label="Country">
-        <input className="min-h-12 w-full rounded-xl border border-slate-800 bg-slate-950 px-4 text-sm font-bold text-white outline-none focus:border-gold-400" placeholder="Country" />
+        <CountrySelect />
       </Field>
       <Field label="Bank name">
         <input className="min-h-12 w-full rounded-xl border border-slate-800 bg-slate-950 px-4 text-sm font-bold text-white outline-none focus:border-gold-400" placeholder="Bank name" />
@@ -1146,7 +1722,6 @@ function WireForm({
       <Field label="Amount">
         <MoneyInput value={amount} onChange={setAmount} />
       </Field>
-      <TransferPinField transferPin={transferPin} pinInput={pinInput} setPinInput={setPinInput} newPin={newPin} setNewPin={setNewPin} />
       <div className="lg:col-span-2">
         <SubmitButton isWorking={isWorking} label="Send wire" workingLabel="Sending wire..." icon={Globe2} />
       </div>
@@ -1154,21 +1729,125 @@ function WireForm({
   );
 }
 
+function ExternalTransferForm({
+  method,
+  accounts,
+  fromAccountId,
+  setFromAccountId,
+  amount,
+  setAmount,
+  transferPin,
+  pinInput,
+  setPinInput,
+  newPin,
+  setNewPin,
+  isWorking,
+  onSubmit,
+  formatMoney,
+}: {
+  method: { title: string; helper: string };
+  accounts: Account[];
+  fromAccountId: string;
+  setFromAccountId: (value: string) => void;
+  amount: string;
+  setAmount: (value: string) => void;
+  transferPin: string;
+  pinInput: string;
+  setPinInput: (value: string) => void;
+  newPin: string;
+  setNewPin: (value: string) => void;
+  isWorking: boolean;
+  onSubmit: (event: React.FormEvent) => void;
+  formatMoney: (value: number) => string;
+}) {
+  const detailLabel = getTransferDetailLabel(method.title);
+  return (
+    <form onSubmit={onSubmit} className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+      <div className="rounded-2xl border border-primary-400/20 bg-primary-500/10 p-4 lg:col-span-2">
+        <p className="text-sm font-black text-primary-100">{method.title}</p>
+        <p className="mt-1 text-sm leading-6 text-slate-300">{method.helper}</p>
+      </div>
+      <Field label="From">
+        <AccountSelect value={fromAccountId} onChange={setFromAccountId} accounts={accounts} formatMoney={formatMoney} />
+      </Field>
+      <Field label={detailLabel}>
+        <input
+          required
+          className="min-h-12 w-full rounded-xl border border-slate-800 bg-slate-950 px-4 text-sm font-bold text-white outline-none focus:border-gold-400"
+          placeholder={detailLabel}
+        />
+      </Field>
+      <Field label="Amount">
+        <MoneyInput value={amount} onChange={setAmount} />
+      </Field>
+      <div className="lg:col-span-2">
+        <SubmitButton isWorking={isWorking} label={`Send with ${method.title}`} workingLabel="Sending..." icon={Send} />
+      </div>
+    </form>
+  );
+}
+
+function getTransferDetailLabel(methodTitle: string) {
+  switch (methodTitle) {
+    case 'Cryptocurrency':
+      return 'Wallet address';
+    case 'PayPal':
+    case 'Skrill':
+    case 'Wise Transfer':
+      return 'Email';
+    case 'Cash App':
+      return 'Cash App tag';
+    case 'Venmo':
+      return 'Venmo name';
+    case 'Zelle':
+      return 'Email or phone';
+    case 'Revolut':
+      return 'Revolut tag or email';
+    case 'Alipay':
+      return 'Alipay ID';
+    case 'WeChat Pay':
+      return 'WeChat ID';
+    default:
+      return 'Account detail';
+  }
+}
+
+function CountrySelect() {
+  return (
+    <select
+      defaultValue=""
+      required
+      className="min-h-12 w-full rounded-xl border border-slate-800 bg-slate-950 px-4 text-sm font-bold text-white outline-none focus:border-gold-400"
+    >
+      <option value="" disabled>
+        Pick a country
+      </option>
+      {wireCountries.map((country) => (
+        <option key={country} value={country}>
+          {country}
+        </option>
+      ))}
+    </select>
+  );
+}
+
 function HistoryList({
   transactions,
   formatMoney,
   compact = false,
+  variant = 'default',
 }: {
   transactions: Transaction[];
   formatMoney: (value: number) => string;
   compact?: boolean;
+  variant?: 'default' | 'soft';
 }) {
   return (
-    <div className="divide-y divide-slate-800 overflow-hidden rounded-2xl border border-slate-800">
+    <div className={`overflow-hidden rounded-2xl border ${variant === 'soft' ? 'divide-y divide-primary-800/60 border-primary-800/70 bg-slate-950/35' : 'divide-y divide-slate-800 border-slate-800'}`}>
       {transactions.map((transaction) => {
         const isMoneyOut = transaction.amount < 0;
         return (
-          <div key={transaction.id} className={`flex items-center justify-between gap-4 bg-slate-950 ${compact ? 'p-3' : 'p-4'}`}>
+          <div key={transaction.id} className={`flex items-center justify-between gap-4 ${variant === 'soft' ? 'bg-slate-900/60' : 'bg-slate-950'} ${compact ? 'p-3' : 'p-4'}`}>
             <div className="flex min-w-0 items-center gap-3">
               <div className={`rounded-full p-2 ${isMoneyOut ? 'bg-red-400/10 text-red-300' : 'bg-emerald-400/10 text-emerald-300'}`}>
                 {isMoneyOut ? <ArrowUpRight className="h-5 w-5" /> : <ArrowDownLeft className="h-5 w-5" />}
@@ -1278,6 +1957,52 @@ function TransferPinPrompt({
         />
         <button onClick={onSave} className="min-h-12 rounded-xl bg-gold-400 px-5 text-sm font-black text-slate-950 hover:bg-gold-300">
           Save PIN
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function TransferPinGate({
+  isOpen,
+  transferPin,
+  pinInput,
+  setPinInput,
+  newPin,
+  setNewPin,
+  onCancel,
+  onConfirm,
+}: {
+  isOpen: boolean;
+  transferPin: string;
+  pinInput: string;
+  setPinInput: (value: string) => void;
+  newPin: string;
+  setNewPin: (value: string) => void;
+  onCancel: () => void;
+  onConfirm: () => void;
+}) {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-[60] flex items-end bg-slate-950/80 p-4 backdrop-blur-sm sm:items-center sm:justify-center">
+      <div className="w-full rounded-[1.5rem] border border-slate-700 bg-slate-900 p-5 shadow-2xl shadow-black/50 sm:max-w-md">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <h3 className="text-xl font-black text-white">{transferPin ? 'Enter transfer PIN' : 'Set transfer PIN'}</h3>
+            <p className="mt-1 text-sm leading-6 text-slate-300">
+              {transferPin ? 'Use your 4 numbers to finish this transfer.' : 'Choose 4 numbers to protect future transfers.'}
+            </p>
+          </div>
+          <button onClick={onCancel} className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-slate-800 text-slate-200">
+            <X className="h-5 w-5" />
+          </button>
+        </div>
+        <div className="mt-5">
+          <TransferPinField transferPin={transferPin} pinInput={pinInput} setPinInput={setPinInput} newPin={newPin} setNewPin={setNewPin} />
+        </div>
+        <button onClick={onConfirm} className="mt-5 min-h-12 w-full rounded-xl bg-gold-400 px-5 text-sm font-black text-slate-950 hover:bg-gold-300">
+          Continue
         </button>
       </div>
     </div>
