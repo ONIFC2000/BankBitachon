@@ -14,6 +14,7 @@ import {
   ArrowLeft,
   ArrowRight,
   ArrowUpRight,
+  BookOpen,
   Building2,
   CheckCircle,
   CircleHelp,
@@ -31,8 +32,10 @@ import {
   Plus,
   ReceiptText,
   RotateCcw,
+  Search,
   Send,
   Settings,
+  Sparkles,
   Wallet,
   X,
 } from 'lucide-react';
@@ -68,8 +71,24 @@ type DashboardPage =
   | 'loan-request'
   | 'tax-refund'
   | 'loan-history'
+  | 'opportunities'
+  | 'opportunity-detail'
   | 'settings'
   | 'support';
+
+type Opportunity = {
+  id: string;
+  title: string;
+  provider: string;
+  category: string;
+  deadline: string;
+  amount: string;
+  location: string;
+  image: string;
+  match: string;
+  summary: string;
+  tags: string[];
+};
 
 const pageTitles: Record<DashboardPage, { title: string; helper: string }> = {
   home: {
@@ -168,6 +187,14 @@ const pageTitles: Record<DashboardPage, { title: string; helper: string }> = {
     title: 'Loan History',
     helper: 'See loan balances and loan payments.',
   },
+  opportunities: {
+    title: 'Opportunities',
+    helper: 'Browse scholarships, grants, and funding matches.',
+  },
+  'opportunity-detail': {
+    title: 'Opportunity',
+    helper: 'Review details, save it, or continue to apply.',
+  },
   settings: {
     title: 'Settings',
     helper: 'Update basic account choices.',
@@ -198,6 +225,7 @@ const appMenuSections = [
   {
     label: 'Services',
     items: [
+      { id: 'opportunities' as DashboardPage, label: 'Opportunities', icon: Sparkles },
       { id: 'loan-request' as DashboardPage, label: 'Loan Request', icon: BadgeDollarSign },
       { id: 'tax-refund' as DashboardPage, label: 'IRS Tax Refund', icon: FileText },
       { id: 'loan-history' as DashboardPage, label: 'Loan History', icon: RotateCcw },
@@ -510,6 +538,87 @@ const wireCountries = [
 
 const moneyPages: DashboardPage[] = ['local-transfer', 'deposit', 'wire', 'request-money', ...transferMethodPages];
 
+const opportunities: Opportunity[] = [
+  {
+    id: 'mastercard-foundation-scholars',
+    title: 'Mastercard Foundation Scholars Program',
+    provider: 'Mastercard Foundation partner universities',
+    category: 'Fully funded scholarship',
+    deadline: 'Rolling university deadlines',
+    amount: 'Tuition, housing, stipend',
+    location: 'Africa, Canada, UK, US',
+    image: 'https://images.unsplash.com/photo-1523580846011-d3a5bc25702b?auto=format&fit=crop&w=900&q=85',
+    match: '96% match',
+    summary: 'For high-achieving young leaders seeking undergraduate or graduate study with leadership development support.',
+    tags: ['Scholarship', 'Leadership', 'Undergraduate', 'Graduate'],
+  },
+  {
+    id: 'chevening-scholarship',
+    title: 'Chevening Scholarship',
+    provider: 'UK Government',
+    category: 'Graduate scholarship',
+    deadline: 'Applications open annually',
+    amount: 'Full tuition plus living support',
+    location: 'United Kingdom',
+    image: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=900&q=85',
+    match: '91% match',
+    summary: 'A one-year master’s scholarship for emerging leaders with strong academic and professional potential.',
+    tags: ['Masters', 'Leadership', 'UK', 'Fully funded'],
+  },
+  {
+    id: 'erasmus-mundus-joint-masters',
+    title: 'Erasmus Mundus Joint Masters',
+    provider: 'European Union',
+    category: 'International masters',
+    deadline: 'Program-specific deadlines',
+    amount: 'Tuition, travel, monthly stipend',
+    location: 'Europe',
+    image: 'https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?auto=format&fit=crop&w=900&q=85',
+    match: '88% match',
+    summary: 'Study across multiple European universities with an integrated international degree pathway.',
+    tags: ['Masters', 'Europe', 'Travel grant', 'Global'],
+  },
+  {
+    id: 'google-career-cert-scholarship',
+    title: 'Google Career Certificate Scholarship',
+    provider: 'Google and partner nonprofits',
+    category: 'Skills scholarship',
+    deadline: 'Cohort-based',
+    amount: 'Certificate access and career support',
+    location: 'Online',
+    image: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=900&q=85',
+    match: '84% match',
+    summary: 'Short professional training paths in data analytics, cybersecurity, IT support, UX, and project management.',
+    tags: ['Online', 'Career', 'Tech', 'Certificate'],
+  },
+  {
+    id: 'african-development-bank-internship',
+    title: 'African Development Bank Internship',
+    provider: 'African Development Bank Group',
+    category: 'Paid internship',
+    deadline: 'Multiple annual windows',
+    amount: 'Monthly stipend',
+    location: 'Regional offices',
+    image: 'https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=900&q=85',
+    match: '82% match',
+    summary: 'Professional exposure for students and recent graduates interested in development finance and policy.',
+    tags: ['Internship', 'Finance', 'Development', 'Graduate'],
+  },
+  {
+    id: 'orange-social-venture-prize',
+    title: 'Orange Social Venture Prize',
+    provider: 'Orange',
+    category: 'Startup grant',
+    deadline: 'Annual challenge',
+    amount: 'Grant funding and mentorship',
+    location: 'Africa and Middle East',
+    image: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=900&q=85',
+    match: '79% match',
+    summary: 'Funding and visibility for entrepreneurs building technology-driven social impact ventures.',
+    tags: ['Grant', 'Startup', 'Social impact', 'Founder'],
+  },
+];
+
 export default function Dashboard({ userName, onLogout, setActiveTab }: DashboardProps) {
   const [accounts, setAccounts] = useState<Account[]>(INITIAL_ACCOUNTS);
   const [transactions, setTransactions] = useState<Transaction[]>(INITIAL_TRANSACTIONS);
@@ -529,6 +638,7 @@ export default function Dashboard({ userName, onLogout, setActiveTab }: Dashboar
   const [newPin, setNewPin] = useState('');
   const [isPinGateOpen, setIsPinGateOpen] = useState(false);
   const [pendingTransferAction, setPendingTransferAction] = useState<'send' | 'deposit' | null>(null);
+  const [selectedOpportunityId, setSelectedOpportunityId] = useState(opportunities[0].id);
 
   useEffect(() => {
     const timer = window.setInterval(() => setNow(new Date()), 1000);
@@ -541,7 +651,17 @@ export default function Dashboard({ userName, onLogout, setActiveTab }: Dashboar
 
   useEffect(() => {
     const syncPageFromHash = () => {
-      const hashPage = window.location.hash.replace('#dashboard-', '') as DashboardPage;
+      const hashValue = window.location.hash.replace('#dashboard-', '');
+      if (hashValue.startsWith('opportunity-')) {
+        const opportunityId = hashValue.replace('opportunity-', '');
+        if (opportunities.some((item) => item.id === opportunityId)) {
+          setSelectedOpportunityId(opportunityId);
+          setPage('opportunity-detail');
+        }
+        return;
+      }
+
+      const hashPage = hashValue as DashboardPage;
       if (Object.keys(pageTitles).includes(hashPage)) {
         setPage(hashPage);
       }
@@ -558,6 +678,13 @@ export default function Dashboard({ userName, onLogout, setActiveTab }: Dashboar
     window.history.replaceState(null, '', `#dashboard-${nextPage}`);
   };
 
+  const openOpportunity = (opportunityId: string) => {
+    setSelectedOpportunityId(opportunityId);
+    setPage('opportunity-detail');
+    setIsMobileMenuOpen(false);
+    window.history.replaceState(null, '', `#dashboard-opportunity-${opportunityId}`);
+  };
+
   const primaryAccount = accounts.find((acc) => acc.id === 'ac1') || accounts[0];
   const totalBalance = useMemo(
     () => accounts.reduce((sum, account) => sum + Math.max(account.balance, 0), 0),
@@ -569,6 +696,7 @@ export default function Dashboard({ userName, onLogout, setActiveTab }: Dashboar
 
   const isMoneyPage = moneyPages.includes(page);
   const isPopupPage = isMoneyPage || page === 'account';
+  const selectedOpportunity = opportunities.find((item) => item.id === selectedOpportunityId) || opportunities[0];
 
   const showMessage = (text: string) => {
     setMessage(text);
@@ -920,6 +1048,11 @@ export default function Dashboard({ userName, onLogout, setActiveTab }: Dashboar
               <VirtualCardPromo onApply={() => openPage('cards')} />
               <RecentHistory transactions={transactions.slice(0, 2)} formatMoney={formatMoney} onViewAll={() => openPage('history')} />
             </div>
+            <AiOpportunityRecommendations
+              opportunities={opportunities.slice(0, 5)}
+              onOpenOpportunity={openOpportunity}
+              onViewMore={() => openPage('opportunities')}
+            />
             </>
           )}
 
@@ -1018,6 +1151,14 @@ export default function Dashboard({ userName, onLogout, setActiveTab }: Dashboar
 
           {page === 'loan-history' && <LoanHistory accounts={accounts} formatMoney={formatMoney} />}
 
+          {page === 'opportunities' && (
+            <OpportunitiesPage opportunities={opportunities} onOpenOpportunity={openOpportunity} />
+          )}
+
+          {page === 'opportunity-detail' && (
+            <OpportunityDetail opportunity={selectedOpportunity} onBack={() => openPage('opportunities')} />
+          )}
+
           {page === 'settings' && <SimpleServicePage title="Settings" buttonLabel="Save settings" fields={['Email alerts', 'Default account', 'Display name']} />}
 
           {page === 'support' && <SimpleServicePage title="Support ticket" buttonLabel="Send ticket" fields={['What happened?', 'Best contact email', 'Message']} />}
@@ -1088,6 +1229,7 @@ function MobileAppMenu({
     { id: 'home' as DashboardPage, label: 'Home', icon: Home, tone: 'bg-primary-500/90 border-primary-300/30 text-white' },
     { id: 'history' as DashboardPage, label: 'Activity', icon: ReceiptText, tone: 'bg-emerald-500/85 border-emerald-300/30 text-slate-950' },
     { id: 'cards' as DashboardPage, label: 'Cards', icon: CreditCard, tone: 'bg-primary-500/90 border-primary-300/30 text-white' },
+    { id: 'opportunities' as DashboardPage, label: 'Opportunities', icon: Sparkles, tone: 'bg-gold-400/90 border-gold-200/40 text-slate-950' },
     { id: 'transfer' as DashboardPage, label: 'Transfer', icon: Send, tone: 'bg-emerald-500/85 border-emerald-300/30 text-slate-950' },
     { id: 'wire-methods' as DashboardPage, label: 'Methods', icon: Globe2, tone: 'bg-emerald-500/85 border-emerald-300/30 text-slate-950' },
     { id: 'receive' as DashboardPage, label: 'Receive', icon: Download, tone: 'bg-primary-500/90 border-primary-300/30 text-white' },
@@ -1283,6 +1425,200 @@ function VirtualCardPromo({ onApply }: { onApply: () => void }) {
         >
           Apply now
         </button>
+      </div>
+    </div>
+  );
+}
+
+function AiOpportunityRecommendations({
+  opportunities,
+  onOpenOpportunity,
+  onViewMore,
+}: {
+  opportunities: Opportunity[];
+  onOpenOpportunity: (id: string) => void;
+  onViewMore: () => void;
+}) {
+  return (
+    <section className="mt-6 overflow-hidden rounded-2xl border border-slate-800 bg-slate-950 p-4 shadow-lg shadow-black/20 sm:p-5">
+      <div className="mb-4 flex items-start justify-between gap-4">
+        <div className="flex items-start gap-3">
+          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-gold-400 text-slate-950">
+            <Sparkles className="h-5 w-5" />
+          </span>
+          <div>
+            <p className="text-xs font-black uppercase tracking-widest text-gold-300">AI recommendations</p>
+            <h3 className="mt-1 text-xl font-black text-white">Here are opportunities that fit you</h3>
+            <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-400">
+              I found these as quick shortcuts. Open any card to view the full opportunity page, save it, or apply.
+            </p>
+          </div>
+        </div>
+        <button
+          onClick={onViewMore}
+          className="shrink-0 rounded-full border border-slate-700 px-3 py-2 text-xs font-black text-gold-300 hover:border-gold-400"
+        >
+          View more
+        </button>
+      </div>
+      <div className="-mx-4 flex snap-x gap-4 overflow-x-auto px-4 pb-2 sm:-mx-5 sm:px-5">
+        {opportunities.map((opportunity) => (
+          <OpportunityCard
+            key={opportunity.id}
+            opportunity={opportunity}
+            onOpen={() => onOpenOpportunity(opportunity.id)}
+            layout="rail"
+          />
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function OpportunitiesPage({
+  opportunities,
+  onOpenOpportunity,
+}: {
+  opportunities: Opportunity[];
+  onOpenOpportunity: (id: string) => void;
+}) {
+  return (
+    <div className="space-y-5">
+      <div className="rounded-2xl border border-gold-400/25 bg-gold-400/10 p-4">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <p className="text-xs font-black uppercase tracking-widest text-gold-300">Opportunity app</p>
+            <h3 className="mt-1 text-2xl font-black text-white">Recommended cards</h3>
+            <p className="mt-2 text-sm leading-6 text-slate-300">
+              Cards stay compact here. Details, eligibility, save, and apply actions live on the opportunity page.
+            </p>
+          </div>
+          <div className="flex min-h-12 items-center gap-2 rounded-xl border border-slate-700 bg-slate-950 px-4 text-sm font-bold text-slate-300">
+            <Search className="h-4 w-4 text-gold-300" />
+            Browse matches
+          </div>
+        </div>
+      </div>
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+        {opportunities.map((opportunity) => (
+          <OpportunityCard
+            key={opportunity.id}
+            opportunity={opportunity}
+            onOpen={() => onOpenOpportunity(opportunity.id)}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function OpportunityCard({
+  opportunity,
+  onOpen,
+  layout = 'grid',
+}: {
+  key?: React.Key;
+  opportunity: Opportunity;
+  onOpen: () => void;
+  layout?: 'grid' | 'rail';
+}) {
+  return (
+    <button
+      onClick={onOpen}
+      className={`group snap-start overflow-hidden rounded-2xl border border-slate-800 bg-slate-900 text-left shadow-lg shadow-black/20 transition hover:-translate-y-0.5 hover:border-gold-400/70 ${
+        layout === 'rail' ? 'w-[78vw] shrink-0 sm:w-72 lg:w-80' : 'w-full'
+      }`}
+    >
+      <div className="relative aspect-[16/10] overflow-hidden bg-slate-800">
+        <img src={opportunity.image} alt="" className="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/75 via-transparent to-transparent" />
+        <span className="absolute left-3 top-3 rounded-full bg-slate-950/80 px-3 py-1 text-xs font-black text-gold-300 backdrop-blur">
+          {opportunity.match}
+        </span>
+        <span className="absolute bottom-3 left-3 rounded-full bg-white px-3 py-1 text-xs font-black text-slate-950">
+          {opportunity.category}
+        </span>
+      </div>
+      <div className="p-4">
+        <p className="text-xs font-black uppercase tracking-widest text-slate-500">{opportunity.provider}</p>
+        <h4 className="mt-2 line-clamp-2 min-h-12 text-lg font-black leading-6 text-white">{opportunity.title}</h4>
+        <div className="mt-3 flex flex-wrap gap-2 text-xs font-bold text-slate-300">
+          <span className="rounded-full bg-slate-950 px-2.5 py-1">{opportunity.amount}</span>
+          <span className="rounded-full bg-slate-950 px-2.5 py-1">{opportunity.deadline}</span>
+        </div>
+        <div className="mt-4 flex items-center justify-between gap-3 border-t border-slate-800 pt-3">
+          <span className="text-sm font-bold text-slate-400">{opportunity.location}</span>
+          <span className="inline-flex items-center gap-1 text-sm font-black text-gold-300">
+            View <ArrowUpRight className="h-4 w-4" />
+          </span>
+        </div>
+      </div>
+    </button>
+  );
+}
+
+function OpportunityDetail({
+  opportunity,
+  onBack,
+}: {
+  opportunity: Opportunity;
+  onBack: () => void;
+}) {
+  return (
+    <div className="overflow-hidden rounded-2xl border border-slate-800 bg-slate-950">
+      <div className="relative min-h-72 overflow-hidden">
+        <img src={opportunity.image} alt="" className="absolute inset-0 h-full w-full object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/45 to-slate-950/10" />
+        <button
+          onClick={onBack}
+          className="absolute left-4 top-4 inline-flex min-h-10 items-center gap-2 rounded-full bg-slate-950/80 px-4 text-sm font-black text-white backdrop-blur hover:bg-slate-900"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Back
+        </button>
+        <div className="absolute inset-x-0 bottom-0 p-5 sm:p-7">
+          <p className="text-xs font-black uppercase tracking-widest text-gold-300">{opportunity.provider}</p>
+          <h3 className="mt-2 max-w-3xl text-3xl font-black leading-tight text-white sm:text-4xl">{opportunity.title}</h3>
+        </div>
+      </div>
+      <div className="grid gap-6 p-5 sm:p-7 lg:grid-cols-[1fr_18rem]">
+        <div>
+          <div className="flex flex-wrap gap-2">
+            {opportunity.tags.map((tag) => (
+              <span key={tag} className="rounded-full border border-slate-700 px-3 py-1.5 text-xs font-black text-slate-300">
+                {tag}
+              </span>
+            ))}
+          </div>
+          <p className="mt-5 text-base leading-7 text-slate-300">{opportunity.summary}</p>
+          <div className="mt-6 grid gap-3 sm:grid-cols-3">
+            {[
+              ['Award', opportunity.amount],
+              ['Deadline', opportunity.deadline],
+              ['Location', opportunity.location],
+            ].map(([label, value]) => (
+              <div key={label} className="rounded-2xl border border-slate-800 bg-slate-900 p-4">
+                <p className="text-xs font-black uppercase tracking-widest text-slate-500">{label}</p>
+                <p className="mt-2 text-sm font-black text-white">{value}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+        <aside className="rounded-2xl border border-gold-400/25 bg-gold-400/10 p-4">
+          <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-gold-400 text-slate-950">
+            <BookOpen className="h-6 w-6" />
+          </div>
+          <p className="text-sm font-black text-gold-200">{opportunity.match}</p>
+          <p className="mt-2 text-sm leading-6 text-slate-300">
+            This page is where the full application workflow belongs, so AI responses stay short and card-based.
+          </p>
+          <button className="mt-5 min-h-12 w-full rounded-xl bg-gold-400 px-5 text-sm font-black text-slate-950 hover:bg-gold-300">
+            Apply now
+          </button>
+          <button className="mt-3 min-h-12 w-full rounded-xl border border-slate-700 px-5 text-sm font-black text-slate-200 hover:border-gold-400">
+            Save opportunity
+          </button>
+        </aside>
       </div>
     </div>
   );
