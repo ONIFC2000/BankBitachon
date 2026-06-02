@@ -47,6 +47,7 @@ interface LoginModalProps {
   onLoginSuccess: (userName: string, metadata?: any) => void;
   setActiveTab: (tab: string) => void;
   initialRecoveryMode?: boolean;
+  initialRegisterMode?: boolean;
   onRecoveryComplete?: () => void;
 }
 
@@ -56,6 +57,7 @@ export default function LoginModal({
   onLoginSuccess,
   setActiveTab,
   initialRecoveryMode = false,
+  initialRegisterMode = false,
   onRecoveryComplete,
 }: LoginModalProps) {
   const [isRegisterMode, setIsRegisterMode] = useState(false);
@@ -99,6 +101,16 @@ export default function LoginModal({
       document.body.style.overflow = previousOverflow;
     };
   }, [isOpen]);
+
+  useEffect(() => {
+    if (isOpen && !initialRecoveryMode) {
+      setIsRegisterMode(initialRegisterMode);
+      setIsPasswordResetMode(false);
+      setErrorMsg('');
+      setSuccessMsg('');
+      setShowResendConfirmation(false);
+    }
+  }, [initialRegisterMode, initialRecoveryMode, isOpen]);
 
   useEffect(() => {
     if (isOpen && initialRecoveryMode) {
@@ -358,7 +370,7 @@ export default function LoginModal({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="relative z-10 grid min-h-dvh grid-cols-1 overflow-y-auto xl:grid-cols-[minmax(420px,0.86fr)_minmax(560px,1.14fr)]"
+          className="relative z-10 grid h-dvh grid-cols-1 overflow-y-auto xl:grid-cols-[minmax(420px,0.86fr)_minmax(560px,1.14fr)]"
           role="dialog"
           aria-modal="true"
           aria-labelledby="auth-title"
@@ -590,6 +602,9 @@ export default function LoginModal({
             </div>
             )}
               </div>
+              <footer className="mt-5 text-center text-[11px] font-semibold leading-5 text-slate-500 dark:text-slate-400">
+                Protected access for BankBitachon members. Need help? Contact support before sharing account details.
+              </footer>
             </div>
           </section>
 

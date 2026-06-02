@@ -26,6 +26,7 @@ export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState('');
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [shouldOpenRegisterMode, setShouldOpenRegisterMode] = useState(false);
   const [isPasswordRecoveryMode, setIsPasswordRecoveryMode] = useState(false);
   const [currentSection, setCurrentSection] = useState('hero');
 
@@ -122,6 +123,13 @@ export default function App() {
             <Hero 
               onNavigateToSection={navigateToSection}
               onOpenSelfLogin={() => {
+                setShouldOpenRegisterMode(false);
+                setIsPasswordRecoveryMode(false);
+                setIsLoginModalOpen(true);
+              }}
+              onOpenCreateAccount={() => {
+                setShouldOpenRegisterMode(true);
+                setIsPasswordRecoveryMode(false);
                 setIsLoginModalOpen(true);
               }}
             />
@@ -163,11 +171,13 @@ export default function App() {
         isOpen={isLoginModalOpen}
         onClose={() => {
           setIsLoginModalOpen(false);
+          setShouldOpenRegisterMode(false);
           setIsPasswordRecoveryMode(false);
         }}
         onLoginSuccess={handleLoginSuccess}
         setActiveTab={setActiveTab}
         initialRecoveryMode={isPasswordRecoveryMode}
+        initialRegisterMode={shouldOpenRegisterMode}
         onRecoveryComplete={() => setIsPasswordRecoveryMode(false)}
       />
 

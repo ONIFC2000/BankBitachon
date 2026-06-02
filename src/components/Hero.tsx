@@ -14,11 +14,13 @@ import {
 interface HeroProps {
   onNavigateToSection: (sectionId: string) => void;
   onOpenSelfLogin: () => void;
+  onOpenCreateAccount: () => void;
 }
 
 export default function Hero({ 
   onNavigateToSection, 
-  onOpenSelfLogin
+  onOpenSelfLogin,
+  onOpenCreateAccount
 }: HeroProps) {
   const [activeSlide, setActiveSlide] = useState(0);
 
@@ -50,7 +52,7 @@ export default function Hero({
       description: "Keep your business money safe and watch it grow. Made for small businesses, startups, and shops. Your money is protected and always easy to access.",
       highlights: ["Free Business Transfers", "Your Own Banking Advisor", "Safe and Protected"],
       ctaText: "Explore Business Services",
-      targetId: "bento-features",
+      targetId: "auth-register",
       badge: "Business Banking",
       image: "https://images.unsplash.com/photo-1556740758-90de374c12ad?auto=format&fit=crop&q=80&w=1200"
     }
@@ -113,7 +115,13 @@ export default function Hero({
 
                   <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-3 sm:gap-4 pt-4">
                     <button
-                      onClick={() => onNavigateToSection(marketingSlides[activeSlide].targetId)}
+                      onClick={() => {
+                        if (marketingSlides[activeSlide].targetId === 'auth-register') {
+                          onOpenCreateAccount();
+                          return;
+                        }
+                        onNavigateToSection(marketingSlides[activeSlide].targetId);
+                      }}
                       className="inline-flex w-full sm:w-auto items-center justify-center gap-2 bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-500 hover:to-primary-600 text-white font-bold text-sm tracking-wide px-6 py-3.5 rounded-lg transition-all shadow-lg hover:shadow-primary-500/15 cursor-pointer"
                     >
                       <span>{marketingSlides[activeSlide].ctaText}</span>
