@@ -42,48 +42,48 @@ export default function AboutUsSection() {
       icon: <Smartphone className="w-5 h-5" />,
       title: "Digital Banking",
       description:
-        "Transform the way you manage money with our intuitive digital platform. We blend security and simplicity to give you full control over your finances - anytime, anywhere.",
+        "Bank from your phone or computer with simple tools for balances, transfers, cards, and account updates.",
       position: "left",
     },
     {
       icon: <PiggyBank className="w-5 h-5" />,
       title: "Grow Your Money",
       description:
-        "Build lasting financial health with smart savings and investment tools designed to grow with you. From automated round-ups to goal-based planning, we make wealth-building effortless.",
+        "Use savings tools and clear rates to help your money grow over time without confusing steps.",
       position: "left",
     },
     {
       icon: <ShieldCheck className="w-5 h-5" />,
       title: "Keep Money Safe",
       description:
-        "Our innovative, multi-layered security approach combines cutting-edge encryption with user-friendly design - keeping your data safe without slowing you down.",
+        "We protect accounts with strong encryption, sign-in checks, and careful account monitoring.",
       position: "left",
     },
     {
       icon: <Brain className="w-5 h-5" />,
       title: "Smart Money Tips",
       description:
-        "Elevate your financial decisions with AI-driven insights. From spending patterns to savings opportunities, we help you perfect every dollar's journey.",
+        "See helpful prompts for saving, spending, and planning so each dollar has a clear job.",
       position: "right",
     },
     {
       icon: <CalendarCheck className="w-5 h-5" />,
       title: "Plan Ahead",
       description:
-        "Our meticulous planning tools ensure you stay on track for every goal - from daily budgets to major life milestones - with real-time updates and proactive alerts.",
+        "Track daily needs and bigger goals with updates that help you stay ready.",
       position: "right",
     },
     {
       icon: <CreditCard className="w-5 h-5" />,
       title: "Easy Payments",
       description:
-        "Watch your money work for you. Automate bills, schedule transfers, and handle every aspect of your finances with precision - no matter where you are.",
+        "Pay bills, move money, and schedule transfers from one secure place.",
       position: "right",
     },
   ]
 
   return (
-    <section id="about-section" className="w-full py-14 sm:py-20 bg-slate-50 text-slate-900 overflow-hidden relative">
+    <section id="about" className="w-full py-14 sm:py-20 bg-slate-50 text-slate-900 overflow-hidden relative">
       <div className="absolute top-0 inset-x-0 h-4 bg-gradient-to-b from-slate-950/10 to-transparent pointer-events-none" />
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
         <motion.div
@@ -98,7 +98,7 @@ export default function AboutUsSection() {
             variants={itemVariants}
           >
             <Sparkles className="w-3.5 h-3.5" />
-            Discover Our Mission
+            About Us
           </motion.span>
           <motion.h2
             className="font-display font-black text-3xl sm:text-4.5xl text-slate-900 tracking-tight leading-[1.1]"
@@ -107,12 +107,11 @@ export default function AboutUsSection() {
             About <span className="bg-gradient-to-r from-primary-700 to-gold-600 bg-clip-text text-transparent">Bank Bitachon</span>
           </motion.h2>
           <motion.p className="text-slate-600 text-base leading-relaxed" variants={itemVariants}>
-            We are a dedicated team of financial and digital security experts committed to creating seamless, secure, and
-            intelligent banking experiences. With precision and a customer-first mindset, we turn financial complexity into
-            clarity.
+            Bank Bitachon was built to make banking feel clear, safe, and useful. We help families, workers, and small
+            businesses save more, move money, borrow wisely, and understand each next step.
           </motion.p>
           <motion.h3 className="pt-3 text-xl sm:text-2xl font-display font-black text-slate-900" variants={itemVariants}>
-            Your Financial Journey, Reimagined
+            Banking Built Around Trust
           </motion.h3>
         </motion.div>
 

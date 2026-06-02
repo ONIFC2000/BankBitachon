@@ -112,6 +112,14 @@ export default function Navbar({
             Banking Offers
           </button>
           <button
+            onClick={() => handleNavClick('about')}
+            className={`px-4 py-2 text-sm font-medium tracking-wide rounded-md transition-all duration-200 cursor-pointer ${
+              currentSection === 'about' ? 'text-gold-400 bg-slate-800' : 'text-slate-200 hover:text-gold-400 hover:bg-slate-800/60'
+            }`}
+          >
+            About Us
+          </button>
+          <button
             onClick={() => handleNavClick('calcs')}
             className={`px-4 py-2 text-sm font-medium tracking-wide rounded-md transition-all duration-200 cursor-pointer ${
               currentSection === 'calcs' ? 'text-gold-400 bg-slate-800' : 'text-slate-200 hover:text-gold-400 hover:bg-slate-800/60'
@@ -158,7 +166,7 @@ export default function Navbar({
               className="flex items-center gap-2 bg-gradient-to-r from-gold-500 to-gold-600 text-slate-950 px-5 py-2 rounded-lg font-bold text-sm tracking-wide shadow-md hover:shadow-gold-500/20 shadow-neutral-950 hover:from-gold-400 hover:to-gold-550 active:scale-98 transition-all cursor-pointer"
             >
               <Lock className="w-4 h-4 fill-slate-950 stroke-2" />
-              <span>Secure Login</span>
+              <span>Get Started</span>
             </button>
           )}
         </div>
@@ -198,6 +206,12 @@ export default function Navbar({
                   className="min-h-11 flex justify-center items-center py-2.5 border border-slate-850 rounded-xl text-sm font-semibold text-slate-300 hover:text-white"
                 >
                   Banking Offers
+                </button>
+                <button
+                  onClick={() => handleNavClick('about')}
+                  className="min-h-11 flex justify-center items-center py-2.5 border border-slate-850 rounded-xl text-sm font-semibold text-slate-300 hover:text-white"
+                >
+                  About Us
                 </button>
                 <button
                   onClick={() => handleNavClick('calcs')}
@@ -256,7 +270,7 @@ export default function Navbar({
                       className="w-full min-h-12 flex items-center justify-center gap-2 bg-gradient-to-r from-gold-500 to-gold-600 text-slate-950 font-extrabold text-sm py-3.5 rounded-xl tracking-wide shadow-lg cursor-pointer"
                     >
                       <Lock className="w-4 h-4 fill-slate-950" />
-                      <span>Access Secure Banking</span>
+                      <span>Get Started</span>
                     </button>
                   </>
                 )}

@@ -164,7 +164,7 @@ export default function App() {
         )}
       </main>
 
-      {activeTab === 'home' && <Footer />}
+      {activeTab === 'home' && <Footer onNavigateToSection={navigateToSection} />}
 
       {/* Floating security and assistance overlay buttons */}
       <LoginModal 

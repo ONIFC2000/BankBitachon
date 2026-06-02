@@ -409,12 +409,6 @@ export default function LoginModal({
               </div>
 
               <div className="space-y-4 rounded-3xl border border-white/80 bg-white/74 p-4 shadow-2xl shadow-slate-900/10 backdrop-blur-xl dark:border-slate-800 dark:bg-slate-900/78 dark:shadow-black/30 sm:space-y-5 sm:rounded-[2rem] sm:p-7">
-            {!isSupabaseConfigured && !isPasswordResetMode && (
-              <div className="rounded-2xl border border-amber-200 bg-amber-50 p-3 text-[11px] leading-5 text-amber-900 dark:border-amber-400/30 dark:bg-amber-400/10 dark:text-amber-200">
-                <span className="font-bold">Sandbox mode:</span> Add Supabase URL and publishable key env vars to send live investor confirmations and recovery emails.
-              </div>
-            )}
-
             {errorMsg && (
               <div className="flex items-start gap-2.5 rounded-2xl border border-red-200 bg-red-50 p-3 text-xs text-red-700 dark:border-red-400/30 dark:bg-red-400/10 dark:text-red-200">
                 <AlertCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-red-500" />

@@ -6,7 +6,13 @@
 import React from 'react';
 import { Shield, PhoneCall, Mail } from 'lucide-react';
 
-export default function Footer() {
+interface FooterProps {
+  onNavigateToSection: (sectionId: string) => void;
+}
+
+export default function Footer({ onNavigateToSection }: FooterProps) {
+  const footerLinkClass = 'text-left text-xs text-slate-500 font-medium transition-colors hover:text-white';
+
   return (
     <footer className="bg-slate-950 text-white border-t border-gold-600/30 py-8 sm:pt-16 sm:pb-8 select-none">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -31,7 +37,7 @@ export default function Footer() {
             </div>
 
             <p className="hidden sm:block max-w-sm text-slate-400 text-xs leading-relaxed">
-              We deliver premium mutual banking yields, bullet-proof digital security envelopes, and member-centric loans for individuals, builders, and small businesses alike.
+              We help members save, borrow, and move money with simple tools, strong security, and support that feels close to home.
             </p>
 
             <div className="hidden md:block space-y-2">
@@ -90,12 +96,17 @@ export default function Footer() {
             {/* Corporate Column */}
             <div className="space-y-3.5">
               <h5 className="font-display font-bold text-xs text-gold-400 uppercase tracking-widest">
-                Safeguards
+                Company
               </h5>
-              <ul className="space-y-2 text-xs text-slate-400 font-medium">
-                <li><span className="text-slate-500 font-mono">256-Bit TLS 1.3</span></li>
-                <li><span className="text-slate-500 font-mono">MFA Protocol Hub</span></li>
-                <li><span className="text-slate-500 font-mono">Mutual Charters</span></li>
+              <ul className="space-y-2">
+                <li>
+                  <button type="button" onClick={() => onNavigateToSection('about')} className={footerLinkClass}>
+                    About Us
+                  </button>
+                </li>
+                <li><span className="text-xs text-slate-500 font-mono">256-Bit TLS 1.3</span></li>
+                <li><span className="text-xs text-slate-500 font-mono">MFA Protocol Hub</span></li>
+                <li><span className="text-xs text-slate-500 font-mono">Mutual Charters</span></li>
               </ul>
             </div>
 

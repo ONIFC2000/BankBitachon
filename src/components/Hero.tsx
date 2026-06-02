@@ -27,9 +27,9 @@ export default function Hero({
   // Auto scroll rate slides
   const marketingSlides = [
     {
-      title: "Earn 4.85% APY on your savings.",
-      subtitle: "High-Yield Savings with Bank Bitachon",
-      description: "Put your money in our savings account and watch it grow. You earn 10x more than most banks. No fees. No minimum balance. Take your money out whenever you need it.",
+      title: "Grow your savings with 4.85% APY.",
+      subtitle: "Save more with Bank Bitachon",
+      description: "Put your money in a safe savings account and let it grow. There are no fees, no minimum balance, and you can take money out when you need it.",
       highlights: ["NCUA Insured to $250k", "No Minimum Balance", "Grows Every Month"],
       ctaText: "Open High-Yield Savings",
       targetId: "rates",
@@ -37,9 +37,9 @@ export default function Hero({
       image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=1200"
     },
     {
-      title: "Get a car loan at just 3.99% APR.",
-      subtitle: "Drive with Confidence",
-      description: "Buy a new car or lower your current car payments. Check your rate in 3 minutes. It will not hurt your credit score.",
+      title: "Get a car loan with a low rate.",
+      subtitle: "Drive with confidence",
+      description: "Buy a car or lower your current car payment. Check your rate in 3 minutes. It will not hurt your credit score.",
       highlights: ["No Payments for 90 Days", "Up to 84-Month Terms", "Easy to Switch Loans"],
       ctaText: "Calculate Auto Savings",
       targetId: "calcs",
@@ -47,9 +47,9 @@ export default function Hero({
       image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&q=80&w=1200"
     },
     {
-      title: "Your business earns 5.12% APY.",
-      subtitle: "Business Banking Made Simple",
-      description: "Keep your business money safe and watch it grow. Made for small businesses, startups, and shops. Your money is protected and always easy to access.",
+      title: "Help your business money grow.",
+      subtitle: "Simple banking for your business",
+      description: "Keep your business money safe and easy to use. This is made for small businesses, new companies, and shops.",
       highlights: ["Free Business Transfers", "Your Own Banking Advisor", "Safe and Protected"],
       ctaText: "Explore Business Services",
       targetId: "auth-register",
@@ -73,13 +73,13 @@ export default function Hero({
           src={marketingSlides[activeSlide].image}
           alt=""
           initial={{ opacity: 0, scale: 1.04 }}
-          animate={{ opacity: 0.22, scale: 1 }}
+          animate={{ opacity: 0.42, scale: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.7, ease: 'easeOut' }}
           className="absolute inset-0 h-full w-full object-cover"
         />
       </AnimatePresence>
-      <div className="absolute inset-0 bg-slate-950/80" />
+      <div className="absolute inset-0 bg-slate-950/66" />
       <div className="absolute inset-0 bg-grid-pattern opacity-35" />
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">

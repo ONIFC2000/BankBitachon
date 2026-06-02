@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180" role="img" aria-label="BankBitachon">
+  <rect width="180" height="180" rx="40" fill="#0f172a"/>
+  <rect x="24" y="24" width="132" height="132" rx="30" fill="#facc15"/>
+  <path d="M90 44 126 58v29c0 27-16.4 45.2-36 55-19.6-9.8-36-28-36-55V58l36-14Z" fill="#0f172a"/>
+  <path d="M90 58 113 67.2v19.3c0 16.8-9.2 29.1-23 36.5-13.8-7.4-23-19.7-23-36.5V67.2L90 58Z" fill="none" stroke="#facc15" stroke-width="8" stroke-linejoin="round"/>
+</svg>
